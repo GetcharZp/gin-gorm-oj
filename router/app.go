@@ -17,7 +17,6 @@ func Router() *gin.Engine {
 	// 路由规则
 	r.GET("/ping", service.Ping)
 	r.GET("/problem-list", service.GetProblemList)
-	r.GET("/problem-detail", service.GetProblemDetail)
 
 	return r
 }
