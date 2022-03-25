@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type Submit struct {
+type SubmitBasic struct {
 	gorm.Model
 	Identity        string `gorm:"column:identity;type:varchar(36);" json:"identity"`                 // 唯一标识
 	ProblemIdentity string `gorm:"column:problem_identity;type:varchar(36);" json:"problem_identity"` // 问题表的唯一标识
@@ -10,6 +10,6 @@ type Submit struct {
 	Path            string `gorm:"column:path;type:varchar(255);" json:"path"`                        // 代码存放路径
 }
 
-func (table *Submit) TableName() string {
-	return "submit"
+func (table *SubmitBasic) TableName() string {
+	return "submit_basic"
 }
