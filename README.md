@@ -25,3 +25,8 @@ GIN中文官网：https://gin-gonic.com/zh-cn/docs/
 // @Success 200 {string} json "{"code":"200","msg","","data":""}"
 // @Router /problem-list [get]
 ```
+
+## 安装 jwt
+```shell
+go get github.com/dgrijalva/jwt-go
+```
