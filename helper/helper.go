@@ -2,8 +2,11 @@ package helper
 
 import (
 	"crypto/md5"
+	"crypto/tls"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/jordan-wright/email"
+	"net/smtp"
 )
 
 type UserClaims struct {
@@ -50,4 +53,17 @@ func AnalyseToken(tokenString string) (*UserClaims, error) {
 		return nil, fmt.Errorf("analyse Token Error:%v", err)
 	}
 	return userClaim, nil
+}
+
+// SendCode
+// 发送验证码
+func SendCode(toUserEmail, code string) error {
+	e := email.NewEmail()
+	e.From = "Get <getcharzhaopan@163.com>"
+	e.To = []string{toUserEmail}
+	e.Subject = "验证码发送测试"
+	e.HTML = []byte("您的验证码：<b>" + code + "</b>")
+	return e.SendWithTLS("smtp.163.com:465",
+		smtp.PlainAuth("", "getcharzhaopan@163.com", "", "smtp.163.com"),
+		&tls.Config{InsecureSkipVerify: true, ServerName: "smtp.163.com"})
 }

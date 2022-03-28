@@ -89,3 +89,33 @@ func Login(c *gin.Context) {
 		},
 	})
 }
+
+// SendCode
+// @Tags 公共方法
+// @Summary 发送验证码
+// @Param email formData string true "email"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /send-code [post]
+func SendCode(c *gin.Context) {
+	email := c.PostForm("email")
+	if email == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数不正确",
+		})
+		return
+	}
+	code := "123456"
+	err := helper.SendCode(email, code)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Send Code Error:" + err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "验证码发送成功",
+	})
+}
