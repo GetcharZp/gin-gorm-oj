@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"crypto/tls"
 	"fmt"
+	"getcharzp.cn/define"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jordan-wright/email"
 	"net/smtp"
@@ -64,6 +65,6 @@ func SendCode(toUserEmail, code string) error {
 	e.Subject = "验证码发送测试"
 	e.HTML = []byte("您的验证码：<b>" + code + "</b>")
 	return e.SendWithTLS("smtp.163.com:465",
-		smtp.PlainAuth("", "getcharzhaopan@163.com", "", "smtp.163.com"),
+		smtp.PlainAuth("", "getcharzhaopan@163.com", define.MailPassword, "smtp.163.com"),
 		&tls.Config{InsecureSkipVerify: true, ServerName: "smtp.163.com"})
 }
