@@ -7,7 +7,11 @@ import (
 	"getcharzp.cn/define"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jordan-wright/email"
+	uuid "github.com/satori/go.uuid"
+	"math/rand"
 	"net/smtp"
+	"strconv"
+	"time"
 )
 
 type UserClaims struct {
@@ -62,9 +66,26 @@ func SendCode(toUserEmail, code string) error {
 	e := email.NewEmail()
 	e.From = "Get <getcharzhaopan@163.com>"
 	e.To = []string{toUserEmail}
-	e.Subject = "验证码发送测试"
+	e.Subject = "验证码已发送，请查收"
 	e.HTML = []byte("您的验证码：<b>" + code + "</b>")
 	return e.SendWithTLS("smtp.163.com:465",
 		smtp.PlainAuth("", "getcharzhaopan@163.com", define.MailPassword, "smtp.163.com"),
 		&tls.Config{InsecureSkipVerify: true, ServerName: "smtp.163.com"})
+}
+
+// GetUUID
+// 生成唯一码
+func GetUUID() string {
+	return uuid.NewV4().String()
+}
+
+// GetRand
+// 生成验证码
+func GetRand() string {
+	rand.Seed(time.Now().UnixNano())
+	s := ""
+	for i := 0; i < 6; i++ {
+		s += strconv.Itoa(rand.Intn(10))
+	}
+	return s
 }
