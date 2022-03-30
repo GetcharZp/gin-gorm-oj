@@ -1,0 +1,22 @@
+@startmindmap
+
+title OnlineJudge
+
+* <&flag>OnlineJudge
+** √ 用户模块
+*** √ 密码登录
+*** √ 邮箱注册
+*** √ 用户详情
+** 题目管理模块
+*** √ 题目列表、题目详情
+*** 题目创建
+*** 题目修改
+** 判题模块
+*** √ 提交记录列表
+*** 代码的提交及判断
+** 排名模块
+*** 排名的列表情况
+
+center footer getcharzp
+
+@endmindmap
