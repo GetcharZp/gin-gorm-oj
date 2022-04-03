@@ -94,8 +94,8 @@ func GetProblemDetail(c *gin.Context) {
 // @Param authorization header string true "authorization"
 // @Param title formData string true "title"
 // @Param content formData string true "content"
-// @Param max_runtime formData int false "max_runtime"
-// @Param max_mem formData int false "max_mem"
+// @Param max_runtime formData int true "max_runtime"
+// @Param max_mem formData int true "max_mem"
 // @Param category_ids formData array false "category_ids"
 // @Param test_cases formData array true "test_cases"
 // @Success 200 {string} json "{"code":"200","data":""}"
@@ -107,7 +107,7 @@ func ProblemCreate(c *gin.Context) {
 	maxMem, _ := strconv.Atoi(c.PostForm("max_mem"))
 	categoryIds := c.PostFormArray("category_ids")
 	testCases := c.PostFormArray("test_cases")
-	if title == "" || content == "" || len(categoryIds) == 0 || len(testCases) == 0 {
+	if title == "" || content == "" || len(categoryIds) == 0 || len(testCases) == 0 || maxRuntime == 0 || maxMem == 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "参数不能为空",

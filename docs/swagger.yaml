@@ -1,6 +1,34 @@
 info:
   contact: {}
 paths:
+  /category-list:
+    get:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      - description: keyword
+        in: query
+        name: keyword
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 分类列表
+      tags:
+      - 管理员私有方法
   /login:
     post:
       parameters:
@@ -41,10 +69,12 @@ paths:
       - description: max_runtime
         in: formData
         name: max_runtime
+        required: true
         type: integer
       - description: max_mem
         in: formData
         name: max_mem
+        required: true
         type: integer
       - description: category_ids
         in: formData

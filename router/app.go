@@ -32,7 +32,9 @@ func Router() *gin.Engine {
 	r.GET("/submit-list", service.GetSubmitList)
 
 	// 管理员私有方法
+	// 问题创建
 	r.POST("/problem-create", middlewares.AuthAdminCheck(), service.ProblemCreate)
-
+	// 分类列表
+	r.GET("/category-list", middlewares.AuthAdminCheck(), service.GetCategoryList)
 	return r
 }
