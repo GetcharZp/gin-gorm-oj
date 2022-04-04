@@ -1,6 +1,52 @@
 info:
   contact: {}
 paths:
+  /category-create:
+    post:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: parentId
+        in: formData
+        name: parentId
+        type: integer
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 分类创建
+      tags:
+      - 管理员私有方法
+  /category-delete:
+    delete:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: identity
+        in: query
+        name: identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 分类删除
+      tags:
+      - 管理员私有方法
   /category-list:
     get:
       parameters:
@@ -27,6 +73,36 @@ paths:
           schema:
             type: string
       summary: 分类列表
+      tags:
+      - 管理员私有方法
+  /category-modify:
+    put:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: identity
+        in: formData
+        name: identity
+        required: true
+        type: string
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: parentId
+        in: formData
+        name: parentId
+        type: integer
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 分类修改
       tags:
       - 管理员私有方法
   /login:
