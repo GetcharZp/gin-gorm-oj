@@ -10,6 +10,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"math/rand"
 	"net/smtp"
+	"os"
 	"strconv"
 	"time"
 )
@@ -90,4 +91,22 @@ func GetRand() string {
 		s += strconv.Itoa(rand.Intn(10))
 	}
 	return s
+}
+
+// CodeSave
+// 保存代码
+func CodeSave(code []byte) (string, error) {
+	dirName := "code/" + GetUUID()
+	path := dirName + "/main.go"
+	err := os.Mkdir(dirName, 0777)
+	if err != nil {
+		return "", err
+	}
+	f, err := os.Create(path)
+	if err != nil {
+		return "", err
+	}
+	f.Write(code)
+	defer f.Close()
+	return path, nil
 }

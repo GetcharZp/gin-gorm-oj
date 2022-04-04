@@ -133,12 +133,18 @@ paths:
         name: max_mem
         required: true
         type: integer
-      - description: category_ids
+      - collectionFormat: multi
+        description: category_ids
         in: formData
+        items:
+          type: string
         name: category_ids
         type: array
-      - description: test_cases
+      - collectionFormat: multi
+        description: test_cases
         in: formData
+        items:
+          type: string
         name: test_cases
         required: true
         type: array
@@ -383,4 +389,31 @@ paths:
       summary: 用户详情
       tags:
       - 公共方法
+  /user/submit:
+    post:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: problem_identity
+        in: query
+        name: problem_identity
+        required: true
+        type: string
+      - description: code
+        in: body
+        name: code
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 代码提交
+      tags:
+      - 用户私有方法
 swagger: "2.0"

@@ -218,12 +218,20 @@ const docTemplate = `{
                     },
                     {
                         "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
                         "description": "category_ids",
                         "name": "category_ids",
                         "in": "formData"
                     },
                     {
                         "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "multi",
                         "description": "test_cases",
                         "name": "test_cases",
                         "in": "formData",
@@ -584,6 +592,47 @@ const docTemplate = `{
                         "description": "problem identity",
                         "name": "identity",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/submit": {
+            "post": {
+                "tags": [
+                    "用户私有方法"
+                ],
+                "summary": "代码提交",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "problem_identity",
+                        "name": "problem_identity",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "description": "code",
+                        "name": "code",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {

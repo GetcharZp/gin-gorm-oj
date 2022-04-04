@@ -2,6 +2,7 @@ package router
 
 import (
 	_ "getcharzp.cn/docs"
+	"getcharzp.cn/middlewares"
 	"getcharzp.cn/service"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
@@ -45,5 +46,10 @@ func Router() *gin.Engine {
 	authAdmin.PUT("/category-modify", service.CategoryModify)
 	// 分类删除
 	authAdmin.DELETE("/category-delete", service.CategoryDelete)
+
+	// 用户私有方法
+	authUser := r.Group("/user", middlewares.AuthUserCheck())
+	// 代码提交
+	authUser.POST("/submit", service.Submit)
 	return r
 }
