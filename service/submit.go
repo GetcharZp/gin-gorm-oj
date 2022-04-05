@@ -176,6 +176,7 @@ func Submit(c *gin.Context) {
 	case <-CE:
 		sb.Status = 5
 	case <-AC:
+		msg = "答案正确"
 		sb.Status = 1
 	case <-time.After(time.Millisecond * time.Duration(pb.MaxRuntime)):
 		if passCount == len(pb.TestCases) {
