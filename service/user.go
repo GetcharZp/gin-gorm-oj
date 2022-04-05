@@ -236,7 +236,7 @@ func GetRankList(c *gin.Context) {
 
 	var count int64
 	list := make([]*models.UserBasic, 0)
-	err = models.DB.Model(new(models.UserBasic)).Count(&count).Order("finish_problem_num DESC, submit_num ASC").
+	err = models.DB.Model(new(models.UserBasic)).Count(&count).Order("pass_num DESC, submit_num ASC").
 		Offset(page).Limit(size).Find(&list).Error
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
