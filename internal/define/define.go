@@ -8,3 +8,4 @@ var (
 )
 
 var MailPassword = os.Getenv("MailPassword")
+var MysqlDNS = os.Getenv("MysqlDNS")
