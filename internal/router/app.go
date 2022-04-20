@@ -11,6 +11,7 @@ import (
 
 func Router() *gin.Engine {
 	r := gin.Default()
+	r.Use(middlewares.Cors())
 
 	// Swagger 配置
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
