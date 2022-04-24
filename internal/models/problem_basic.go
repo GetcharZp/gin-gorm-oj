@@ -26,7 +26,9 @@ func (table *ProblemBasic) TableName() string {
 }
 
 func GetProblemList(keyword, categoryIdentity string) *gorm.DB {
-	tx := DB.Model(new(ProblemBasic)).Preload("ProblemCategories").Preload("ProblemCategories.CategoryBasic").
+	tx := DB.Model(new(ProblemBasic)).Distinct("`problem_basic`.`id`").Select("DISTINCT(`problem_basic`.`id`), `problem_basic`.`identity`, "+
+		"`problem_basic`.`title`, `problem_basic`.`max_runtime`, `problem_basic`.`max_mem`, `problem_basic`.`pass_num`, "+
+		"`problem_basic`.`submit_num`, `problem_basic`.`created_at`, `problem_basic`.`updated_at`, `problem_basic`.`deleted_at` ").Preload("ProblemCategories").Preload("ProblemCategories.CategoryBasic").
 		Where("title like ? OR content like ? ", "%"+keyword+"%", "%"+keyword+"%")
 	if categoryIdentity != "" {
 		tx.Joins("RIGHT JOIN problem_category pc on pc.problem_id = problem_basic.id").

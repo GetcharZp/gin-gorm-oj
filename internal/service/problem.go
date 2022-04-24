@@ -35,8 +35,12 @@ func GetProblemList(c *gin.Context) {
 	categoryIdentity := c.Query("category_identity")
 
 	list := make([]*models.ProblemBasic, 0)
-	tx := models.GetProblemList(keyword, categoryIdentity)
-	err = tx.Count(&count).Omit("content").Offset(page).Limit(size).Find(&list).Error
+	err = models.GetProblemList(keyword, categoryIdentity).Distinct("`problem_basic`.`id`").Count(&count).Error
+	if err != nil {
+		log.Println("GetProblemList Count Error:", err)
+		return
+	}
+	err = models.GetProblemList(keyword, categoryIdentity).Offset(page).Limit(size).Find(&list).Error
 	if err != nil {
 		log.Println("Get Problem List Error:", err)
 		return

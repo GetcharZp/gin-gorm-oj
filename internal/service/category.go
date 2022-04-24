@@ -11,14 +11,13 @@ import (
 )
 
 // GetCategoryList
-// @Tags 管理员私有方法
+// @Tags 公共方法
 // @Summary 分类列表
-// @Param authorization header string true "authorization"
 // @Param page query int false "page"
 // @Param size query int false "size"
 // @Param keyword query string false "keyword"
 // @Success 200 {string} json "{"code":"200","data":""}"
-// @Router /admin/category-list [get]
+// @Router /category-list [get]
 func GetCategoryList(c *gin.Context) {
 	size, _ := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
 	page, err := strconv.Atoi(c.DefaultQuery("page", define.DefaultPage))

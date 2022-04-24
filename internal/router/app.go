@@ -31,6 +31,8 @@ func Router() *gin.Engine {
 	r.GET("/rank-list", service.GetRankList)
 	// 提交记录
 	r.GET("/submit-list", service.GetSubmitList)
+	// 分类列表
+	r.GET("/category-list", service.GetCategoryList)
 
 	// 管理员私有方法
 	authAdmin := r.Group("/admin", middlewares.AuthAdminCheck())
@@ -39,8 +41,6 @@ func Router() *gin.Engine {
 	authAdmin.POST("/problem-create", service.ProblemCreate)
 	// 问题修改
 	authAdmin.PUT("/problem-modify", service.ProblemModify)
-	// 分类列表
-	authAdmin.GET("/category-list", service.GetCategoryList)
 	// 分类创建
 	authAdmin.POST("/category-create", service.CategoryCreate)
 	// 分类修改

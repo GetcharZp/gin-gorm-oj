@@ -47,34 +47,6 @@ paths:
       summary: 分类删除
       tags:
       - 管理员私有方法
-  /admin/category-list:
-    get:
-      parameters:
-      - description: authorization
-        in: header
-        name: authorization
-        required: true
-        type: string
-      - description: page
-        in: query
-        name: page
-        type: integer
-      - description: size
-        in: query
-        name: size
-        type: integer
-      - description: keyword
-        in: query
-        name: keyword
-        type: string
-      responses:
-        "200":
-          description: '{"code":"200","data":""}'
-          schema:
-            type: string
-      summary: 分类列表
-      tags:
-      - 管理员私有方法
   /admin/category-modify:
     put:
       parameters:
@@ -212,6 +184,29 @@ paths:
       summary: 问题修改
       tags:
       - 管理员私有方法
+  /category-list:
+    get:
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      - description: keyword
+        in: query
+        name: keyword
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 分类列表
+      tags:
+      - 公共方法
   /login:
     post:
       parameters:
