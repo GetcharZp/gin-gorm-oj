@@ -24,6 +24,12 @@ const routes=[
                 component:()=>import('../page/question/index.vue')
             },
             {
+                path:'/questionDetail',
+                name:'questionDetail',
+
+                component:()=>import('../page/question/detail.vue')
+            },
+            {
                 path:'/topList',
                 name:'topList',
 

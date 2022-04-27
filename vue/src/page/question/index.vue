@@ -25,8 +25,8 @@
                         <span>通过人数：{{item.pass_num}}</span>
                     </div>
                 </div>
-                <div>
-                    <span></span>
+                <div class="edit">
+                   <el-icon @click="toDetail(item)"><edit /></el-icon>
                     <span></span>
                 </div>
             </div>
@@ -35,7 +35,12 @@
 </template>
 <script lang="ts" setup>
  import { reactive,ref } from '@vue/reactivity'
+ import {
+  Edit
+} from '@element-plus/icons-vue'
 import api from '../../api/api.js'
+import {useRouter} from 'vue-router'
+const router=useRouter()
  const quesList=ref([])
  const sortList=ref([])
  const actSort=ref<null|number>(null)
@@ -56,6 +61,12 @@ getProblem(null)
          sortList.value=res.data.data.list
      }
  })
+ const toDetail=(item:any)=>{
+     router.push({
+         path:'/questionDetail',
+         query:item
+     })
+ }
 </script>
 <style scoped lang="scss">
 .item{
@@ -63,6 +74,12 @@ getProblem(null)
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    .edit{
+        // width: 20%;
+        color: #13b6f9;
+        cursor: pointer;
+    }
     .title{
         margin-bottom: 20px;
         display: flex;
