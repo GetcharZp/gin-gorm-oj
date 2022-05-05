@@ -25,9 +25,10 @@
                         <span>通过人数：{{item.pass_num}}</span>
                     </div>
                 </div>
-                <div>
-                    <span></span>
-                    <span></span>
+                <div class="edit">
+                   <el-icon @click="toDetail(item)" title="详情"><edit /></el-icon>
+                    <!-- <el-icon title="排行" @click="toRank(item)"><histogram /></el-icon> -->
+                    <el-icon  title="提交列表" @click="toSubList(item)"><list /></el-icon>
                 </div>
             </div>
         </div>
@@ -35,7 +36,12 @@
 </template>
 <script lang="ts" setup>
  import { reactive,ref } from '@vue/reactivity'
+ import {
+  Edit,Histogram,List
+} from '@element-plus/icons-vue'
 import api from '../../api/api.js'
+import {useRouter} from 'vue-router'
+const router=useRouter()
  const quesList=ref([])
  const sortList=ref([])
  const actSort=ref<null|number>(null)
@@ -56,6 +62,25 @@ getProblem(null)
          sortList.value=res.data.data.list
      }
  })
+ const toDetail=(item:any)=>{
+     router.push({
+         path:'/questionDetail',
+         query:item
+     })
+ }
+  const toRank=(item:any)=>{
+     router.push({
+         path:'/topList',
+         query:{identity:item.identity}
+     })
+ }
+  const toSubList=(item:any)=>{
+     router.push({
+         path:'/submitList',
+        query:{identity:item.identity}
+
+     })
+ }
 </script>
 <style scoped lang="scss">
 .item{
@@ -63,6 +88,14 @@ getProblem(null)
     border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    .edit{
+        width: 80px;
+        display: flex;
+        justify-content: space-between;
+        color: #13b6f9;
+        cursor: pointer;
+    }
     .title{
         margin-bottom: 20px;
         display: flex;

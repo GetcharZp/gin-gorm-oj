@@ -11,8 +11,11 @@
     "axios": "^0.26.1",
     "echarts": "^5.3.1",
     "element-plus": "^2.1.4",
+    "monaco-editor": "^0.33.0",
     "qs": "^6.10.3",
     "vue": "^3.2.25",
+    "vue-codemirror": "^4.0.6",
+    "vue3-ace-editor": "^2.2.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
