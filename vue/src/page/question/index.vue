@@ -27,8 +27,8 @@
                 </div>
                 <div class="edit">
                    <el-icon @click="toDetail(item)" title="详情"><edit /></el-icon>
-                    <el-icon title="排行"><histogram /></el-icon>
-                    <el-icon  title="提交列表"><list /></el-icon>
+                    <!-- <el-icon title="排行" @click="toRank(item)"><histogram /></el-icon> -->
+                    <el-icon  title="提交列表" @click="toSubList(item)"><list /></el-icon>
                 </div>
             </div>
         </div>
@@ -66,6 +66,19 @@ getProblem(null)
      router.push({
          path:'/questionDetail',
          query:item
+     })
+ }
+  const toRank=(item:any)=>{
+     router.push({
+         path:'/topList',
+         query:{identity:item.identity}
+     })
+ }
+  const toSubList=(item:any)=>{
+     router.push({
+         path:'/submitList',
+        query:{identity:item.identity}
+
      })
  }
 </script>

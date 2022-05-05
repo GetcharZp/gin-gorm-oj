@@ -12,6 +12,12 @@ export default{
 	getSortList(param){//分类列表
 		return http.get(`/category-list`,param)
 	},
+	getRankList(param){//排行榜
+		return http.get(`/rank-list`,param)
+	},
+	getSubmitList(param){//提交列表
+		return http.get(`/submit-list`,param)
+	},
 	sendCode(param){//发送验证码
 		return http.postUncode(`/send-code`,param)
 	},
