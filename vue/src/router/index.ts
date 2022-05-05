@@ -27,7 +27,7 @@ const routes=[
                 path:'/questionDetail',
                 name:'questionDetail',
 
-                component:()=>import('../page/question/detail.vue')
+                component:()=>import('../page/question/details.vue')
             },
             {
                 path:'/topList',
@@ -54,12 +54,10 @@ const router=createRouter({
     routes
 })
 router.beforeEach((to,from,next)=>{
-    const role = localStorage.getItem('login');
+    const role = localStorage.getItem('token');
     if (!role && to.path !== '/login') {
         // next('/login');
-        if(store.state.isLogin){
-            store.commit('logout')
-       }
+    
        next();
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
@@ -67,9 +65,12 @@ router.beforeEach((to,from,next)=>{
             ? next()
             : next('/403');
     } else {
-        if(!store.state.isLogin){
-             store.commit('loginSucc')
+        if(role&&!store.state.isLogin){
+            store.commit('loginSucc',role)
         }
+        // if(){
+             
+        // }
        
         next();
        

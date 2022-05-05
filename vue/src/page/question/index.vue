@@ -26,8 +26,9 @@
                     </div>
                 </div>
                 <div class="edit">
-                   <el-icon @click="toDetail(item)"><edit /></el-icon>
-                    <span></span>
+                   <el-icon @click="toDetail(item)" title="详情"><edit /></el-icon>
+                    <el-icon title="排行"><histogram /></el-icon>
+                    <el-icon  title="提交列表"><list /></el-icon>
                 </div>
             </div>
         </div>
@@ -36,7 +37,7 @@
 <script lang="ts" setup>
  import { reactive,ref } from '@vue/reactivity'
  import {
-  Edit
+  Edit,Histogram,List
 } from '@element-plus/icons-vue'
 import api from '../../api/api.js'
 import {useRouter} from 'vue-router'
@@ -76,7 +77,9 @@ getProblem(null)
     justify-content: space-between;
     align-items: center;
     .edit{
-        // width: 20%;
+        width: 80px;
+        display: flex;
+        justify-content: space-between;
         color: #13b6f9;
         cursor: pointer;
     }

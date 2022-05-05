@@ -14,6 +14,8 @@
     "monaco-editor": "^0.33.0",
     "qs": "^6.10.3",
     "vue": "^3.2.25",
+    "vue-codemirror": "^4.0.6",
+    "vue3-ace-editor": "^2.2.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {

@@ -3,6 +3,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import { ElMessage } from 'element-plus'
+// import store from "../store";
 // import CryptoJs from 'crypto-js'
 // 使用element-ui Message做消息提醒
 
@@ -22,6 +23,11 @@ service.interceptors.request.use(config => {
 					arrayFormat: 'comma'
 				})
 			}
+		}
+		const token=localStorage.token
+		if(token){
+			
+			config.headers['Authorization']=token
 		}
 	return config
 }, error => {
