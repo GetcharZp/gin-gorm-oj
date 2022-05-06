@@ -14,16 +14,16 @@ func AuthAdminCheck() gin.HandlerFunc {
 		if err != nil {
 			c.Abort()
 			c.JSON(http.StatusOK, gin.H{
-				"code":    http.StatusUnauthorized,
-				"message": "Unauthorized Authorization",
+				"code": http.StatusUnauthorized,
+				"msg":  "Unauthorized Authorization",
 			})
 			return
 		}
 		if userClaim == nil || userClaim.IsAdmin != 1 {
 			c.Abort()
 			c.JSON(http.StatusOK, gin.H{
-				"code":    http.StatusUnauthorized,
-				"message": "Unauthorized Admin",
+				"code": http.StatusUnauthorized,
+				"msg":  "Unauthorized Admin",
 			})
 			return
 		}
