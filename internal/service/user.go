@@ -87,7 +87,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"code": -1,
+		"code": 200,
 		"data": map[string]interface{}{
 			"token": token,
 		},
