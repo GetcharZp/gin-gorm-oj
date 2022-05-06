@@ -103,9 +103,7 @@ const changeLanguage=()=>{
   //       });
 }
 const submitCode=()=>{
-  api.submitCode({
-    code:text.value
-  },route.query.identity).then(res=>{
+  api.submitCode(text.value,route.query.identity).then(res=>{
       if(res.data.code==200){
         msg.value=res.data.data.msg
         ElMessage.success(res.data.data.msg)
