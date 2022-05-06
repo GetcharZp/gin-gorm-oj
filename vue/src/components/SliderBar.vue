@@ -65,9 +65,10 @@ const menuList=[
 <style scoped lang="scss">
 .logo{
   height: 50px;
+  display: none;
   background-color: #05d18f;
   border-bottom: 1px solid #dfff7d;
-  display: flex;
+  // display: flex;
   align-items: center;
   justify-content: center;
   a{

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "esnext",
+    "noEmitOnError":false,//报错时不生成编译后的文件，没报错时正常生成
     "useDefineForClassFields": true,
     "module": "esnext",
     "moduleResolution": "node",

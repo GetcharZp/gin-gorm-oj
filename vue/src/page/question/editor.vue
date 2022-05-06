@@ -1,50 +1,161 @@
 <template>
-  <div>
-   
-    <codemirror
-      ref="cm"
-      v-model="code"
-      :options="cmOptions"
-      @input="inputChange"
-    ></codemirror>
+  <div class="e-box">
+    <div class="select">
+      <el-select v-model="language" @change="changeLanguage">
+        <el-option value="html">HTML</el-option>
+        <el-option value="javascript">javascript</el-option>
+        <el-option value="php">php</el-option>
+        <el-option value="go">go</el-option>
+      </el-select>
+    </div>
+    <div id="codeEditBox"></div>
+    <div class="submit">
+      <el-button type="primary" @click="submitCode">提交</el-button>
+    </div>
+    <div class="sub-box">
+      {{msg}}
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
+import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
+import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import * as monaco from 'monaco-editor';
+import { nextTick,ref } from 'vue'
+import {useRoute} from 'vue-router'
+import api from '../../api/api.js'
+import {ElMessage} from 'element-plus'
+const text=ref('')
+const route=useRoute()
+const language=ref('go')
+const msg=ref()
+// 
+// MonacoEditor start
 //
-import {codemirror} from 'vue-codemirror';
-// 全局引入vue-codemirror
-// 引入主题 可以从 codemirror/theme/ 下引入多个
- // 引入css文件
-  import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/idea.css'
-// 引入语言模式 可以从 codemirror/mode/ 下引入多个
-import 'codemirror/mode/sql/sql.js';
-import { ref } from 'vue';
-const cm=ref()
-const code= ref('select a from table1 where b = 1')
-const cmOptions= ref({
-          // 语言及语法模式
-          mode: 'text/x-sql',
-          // 主题
-          theme: 'idea',
-          // 显示函数
-          line: true,
-          lineNumbers: true,
-          // 软换行
-          lineWrapping: true,
-          // tab宽度
-          tabSize: 4,
+
+// @ts-ignore
+self.MonacoEnvironment = {
+  getWorker(_: string, label: string) {
+    if (label === 'json') {
+      return new jsonWorker()
+    }
+    if (label === 'css' || label === 'scss' || label === 'less') {
+      return new cssWorker()
+    }
+    if (label === 'html' || label === 'handlebars' || label === 'razor') {
+      return new htmlWorker()
+    }
+    if (['typescript', 'javascript'].includes(label)) {
+      return new tsWorker()
+    }
+    return new EditorWorker()
+  },
+}
+let editor: monaco.editor.IStandaloneCodeEditor;
+
+const editorInit = () => {
+    nextTick(()=>{
+        monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+            noSemanticValidation: true,
+            noSyntaxValidation: false
+        });
+        monaco.languages.typescript.javascriptDefaults.setCompilerOptions({
+            target: monaco.languages.typescript.ScriptTarget.ES2016,
+            allowNonTsExtensions: true
+        });
+        
+        !editor ? editor = monaco.editor.create(document.getElementById('codeEditBox') as HTMLElement, {
+            value:text.value, // 编辑器初始显示文字
+            language: 'go', // 语言支持自行查阅demo
+            automaticLayout: true, // 自适应布局  
+            theme: 'vs-dark', // 官方自带三种主题vs, hc-black, or vs-dark
+            foldingStrategy: 'indentation',
+            renderLineHighlight: 'all', // 行亮
+            selectOnLineNumbers: true, // 显示行号
+            minimap:{
+                enabled: false,
+            },
+            readOnly: false, // 只读
+            fontSize: 16, // 字体大小
+            scrollBeyondLastLine: false, // 取消代码后面一大段空白 
+            overviewRulerBorder: false, // 不要滚动条的边框  
+        }) : 
+        editor.setValue("");
+        console.log(editor)
+        // 监听值的变化
+        editor.onDidChangeModelContent((val:any) => {
+            text.value = editor.getValue();
+             
         })
-const inputChange=(content:any)=>{
+    })
+}
+editorInit()
+// @ts-ignore
+const changeLanguage=()=>{
+   monaco.editor.setModelLanguage(editor.getModel(), language.value)
         
-          console.log("code:" + code);
-          console.log("content:" + content)
-        
+
+  //  editor.updateOptions({
+  //           language: "objective-c"
+  //       });
+}
+const submitCode=()=>{
+  api.submitCode({
+    code:text.value
+  },route.query.identity).then(res=>{
+      if(res.data.code==200){
+        msg.value=res.data.data.msg
+        ElMessage.success(res.data.data.msg)
+
+      }else{
+        ElMessage.error(res.data.msg)
       }
+  })
+}
+/***
+ * editor.setValue(newValue)
+
+editor.getValue()
+
+editor.onDidChangeModelContent((val)=>{ //监听值的变化  })
+
+editor.getAction('editor.action.formatDocument').run()    //格式化代码
+
+editor.dispose()    //销毁实例
+
+editor.onDidChangeOptions　　//配置改变事件
+
+editor.onDidChangeLanguage　　//语言改变事件
+ */
 </script>
 <style scoped lang="scss">
-#monaco {
-  width: 500px;
-  height: 500px;
+#codeEditBox {
+  //  width: 100%;
+  flex: 1;
+}
+.select{
+  padding: 10px;
+}
+.submit{
+  text-align: center;
+  padding: 10px 0;
+}
+.e-box{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  box-sizing: border-box;
+  flex-direction: column;
+}
+.sub-box{
+  border-radius: 10px;
+  background-color: #999;
+  padding: 10px;
+  box-sizing: border-box;
+  height: 40px;
+  color: white;
 }
 </style>

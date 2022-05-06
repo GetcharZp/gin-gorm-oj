@@ -4,7 +4,7 @@ import store from "../store";
 const routes=[
     {
         path:"/",
-        redirect:"/index",
+        redirect:"/questionList",
         
 
     },
@@ -55,6 +55,7 @@ const router=createRouter({
 })
 router.beforeEach((to,from,next)=>{
     const role = localStorage.getItem('token');
+   
     if (!role && to.path !== '/login') {
         // next('/login');
     
@@ -66,7 +67,9 @@ router.beforeEach((to,from,next)=>{
             : next('/403');
     } else {
         if(role&&!store.state.isLogin){
+            const username = localStorage.getItem('username');
             store.commit('loginSucc',role)
+            store.commit('setUser',username)
         }
         // if(){
              

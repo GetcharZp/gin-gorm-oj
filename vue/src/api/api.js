@@ -24,6 +24,12 @@ export default{
 	login(param){//登录
 		return http.postUncode(`/login`,param)
 	},
+	register(param){//注册
+		return http.postUncode(`/register`,param)
+	},
+	submitCode(param,id){//提交代码
+		return http.postUncode(`/user/submit?problem_identity=${id}`,param)
+	},
 	// 文件上传
 	uploadFile(param){
 		return http.upFile('http://mz.xiqurongmei.com/a/material/uploadAll',param)
