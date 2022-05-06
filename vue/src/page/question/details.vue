@@ -13,12 +13,12 @@
                         <span>创建时间{{detail.created_at}}</span>
                         <span>提交次数：{{detail.submit_num}}</span>
                         <span>通过次数：{{detail.pass_num}}</span>
-                        <span>最少用时：{{detail.pass_num}}ms</span>
+                        <span>最大耗时：{{detail.max_runtime}}ms</span>
                         
                     </div>
             </div>
             <div class="right">
-
+                <Editor></Editor>  
             </div>
         </div>
    
@@ -27,6 +27,7 @@
  import { reactive,ref } from '@vue/reactivity'
  import {useRoute} from 'vue-router'
  import api from '../../api/api.js'
+ import Editor from './editor.vue'
  import {
   Edit
 } from '@element-plus/icons-vue'
@@ -62,6 +63,9 @@ getDetail()
                 color: #999;
             }
         }
+    }
+    .right{
+        width: 50%;
     }
 }
 </style>

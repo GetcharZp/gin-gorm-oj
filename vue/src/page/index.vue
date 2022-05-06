@@ -63,8 +63,8 @@ import vHistoryTag from "../components/historyTag.vue";
       align-items: center;
     }
     .page-box {
-      height: calc(100% - 80px);
-
+      // height: calc(100% - 80px);
+      height: 100%;
       padding: 10px;
       box-sizing: border-box;
       background-color: #f5f5f5;

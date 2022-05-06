@@ -11,7 +11,7 @@
           ref="ruleFormRef"
           :model="ruleForm"
           :rules="rules"
-          label-width="60px"
+          label-width="80px"
           class="login-form"
           :size="formSize"
         >
@@ -35,7 +35,7 @@
           ref="registFormRef"
           :model="registForm"
           :rules="rules"
-          label-width="60px"
+          label-width="80px"
           class="login-form"
           :size="formSize"
         >
@@ -46,13 +46,20 @@
           <el-form-item label="密码" prop="password">
             <el-input v-model="registForm.password" />
           </el-form-item>
-           <el-form-item label="邮箱" prop="email">
-            <el-input v-model="registForm.email" />
+           <el-form-item label="邮箱" prop="mail">
+            <el-input v-model="registForm.mail" />
           </el-form-item>
           <el-form-item label="验证码" prop="code">
-            <el-input v-model="registForm.code" />
-            <el-button @click="sendCode">发送验证码</el-button>
-            <el-button  disabled>{{remainTime}}秒</el-button>
+            <el-row :gutter="20">
+              <el-col :span="12">  <el-input v-model="registForm.code" /></el-col>
+              <el-col :span="12" style="text-align:right;">
+                  <el-button  disabled v-if="remainTime>0&&remainTime<60">{{remainTime}}秒</el-button>
+            <el-button @click="sendCode" v-else type="primary">发送验证码</el-button>
+              </el-col>
+            </el-row>
+          
+            
+          
           </el-form-item>
 
           <div style="text-align: center">
@@ -87,22 +94,36 @@ const ruleFormRef = ref<FormInstance>();
 const registFormRef=ref<FormInstance>()
 const remainTime=ref(60)
 const ruleForm = reactive({
-  username: "Hello",
+  username: "",
   password: "",
 });
 const registForm=reactive({
-   name: "Hello",
+   name: "",
   password: "",
-  email:'',
+  mail:'',
   code:''
 })
 const rules = reactive({
   username: [
-    { required: true, message: "Please input Activity name", trigger: "blur" },
+    { required: true, message: "请输入用户名", trigger: "blur" },
     
   ],
+   name: [
+    { required: true, message: "请输入用户名", trigger: "blur" },
+    
+  ],
+   code: [
+    { required: true, message: "请输入验证码", trigger: "blur" },
+    
+  ],
+  mail: [
+    { required: true, message: "请输入邮箱", trigger: "blur" },
+    
+  ],
+  
+
   password: [
-    { required: true, message: "Please input Activity name", trigger: "blur" },
+    { required: true, message: "请输入密码", trigger: "blur" },
      
   ],
 });
@@ -114,8 +135,13 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     if (valid) {
       api.login(ruleForm).then(res=>{
         if(res.data&&res.data.data){
+          ElMessage.success('登录成功')
+
            localStorage.setItem("token", res.data.data.token);
       store.commit("loginSucc",res.data.data.token);
+          store.commit("setUser",ruleForm.username);
+
+       localStorage.setItem('username',ruleForm.username)
       emits("loginSucc");
         }
         
@@ -131,9 +157,20 @@ const subRegister = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      localStorage.setItem("login", 1);
-      store.commit("loginSucc");
-      emits("loginSucc");
+      api.register(registForm).then(res=>{
+        if(res.data.code==200){
+          ElMessage.success('注册成功')
+           localStorage.setItem("token", res.data.data.token);
+          store.commit("loginSucc",res.data.data.token);
+          store.commit("setUser",registForm.name);
+       localStorage.setItem('username',registForm.name)
+
+          emits("loginSucc");
+        }else{
+          ElMessage.error(res.data.msg)
+
+        }
+      })
       // router.push('/index')
     } else {
       console.log("error submit!", fields);
@@ -154,11 +191,12 @@ const startRemain=()=>{
 }
 const sendCode=()=>{
   const re=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-  if(re.test(registForm.email)){
+  if(re.test(registForm.mail)){
+     startRemain()
       api.sendCode({
-        email:registForm.email
+        email:registForm.mail
       }).then(res=>{
-        startRemain()
+       
       })
   }else{
     ElMessage('请输入正确的邮箱')

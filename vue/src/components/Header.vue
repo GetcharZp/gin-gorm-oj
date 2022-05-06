@@ -9,6 +9,7 @@ import {
 const store=useStore()
 const collapse=computed(()=>store.state.collapse)
 const isLogin=computed(()=>store.state.isLogin)
+const username=computed(()=>store.state.username)
 function changeMenu(){
   store.commit('changeCollapse',!collapse.value)
 }
@@ -33,7 +34,7 @@ const handleCommand = (command: string | number | object) => {
 
         <div class="el-dropdown-link">
           <el-avatar :size="25" :src="circleUrl" />
-          <span>管理员</span>
+          <span>您好！{{username}}</span>
            
            <el-icon><setting /></el-icon>
         </div>
@@ -47,8 +48,8 @@ const handleCommand = (command: string | number | object) => {
       <span class="login" @click="showLogin=true" v-else>登录</span>
     <el-dialog
     v-model="showLogin"
-    title="Tips"
-    width="30%"
+    title="用户登录/注册"
+    width="500px"
     :before-close="handleClose"
   >
     <LoginPage @loginSucc="loginSucc" /> 
