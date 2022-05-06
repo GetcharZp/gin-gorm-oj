@@ -4,7 +4,8 @@ const store = createStore({
         collapse:false,
         isLogin:false,
         token:null,
-        username:null
+        username:null,
+        is_admin:0
     },
     mutations:{
         changeCollapse(state,data){
@@ -17,7 +18,8 @@ const store = createStore({
             
     },
     setUser(state,data){
-        state.username=data
+        state.username=data.username
+        state.is_admin=data.is_admin
     },
     logout(state,data){
         state.isLogin=false

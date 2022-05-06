@@ -139,7 +139,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 
            localStorage.setItem("token", res.data.data.token);
       store.commit("loginSucc",res.data.data.token);
-          store.commit("setUser",ruleForm.username);
+          store.commit("setUser",{username:ruleForm.username,is_admin:res.data.data.is_admin});
+       localStorage.setItem('is_admin',res.data.data.is_admin)
 
        localStorage.setItem('username',ruleForm.username)
       emits("loginSucc");
@@ -162,8 +163,10 @@ const subRegister = async (formEl: FormInstance | undefined) => {
           ElMessage.success('注册成功')
            localStorage.setItem("token", res.data.data.token);
           store.commit("loginSucc",res.data.data.token);
-          store.commit("setUser",registForm.name);
+                    store.commit("setUser",{username:registForm.name,is_admin:res.data.data.is_admin});
+
        localStorage.setItem('username',registForm.name)
+       localStorage.setItem('is_admin',res.data.data.is_admin)
 
           emits("loginSucc");
         }else{

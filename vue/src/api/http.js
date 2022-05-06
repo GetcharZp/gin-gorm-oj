@@ -24,6 +24,18 @@ const http ={
         if(params) config.data = params
         return request(config)
     },
+    postJson(url,params){
+        const config = {
+            method: 'post',
+            url:url,
+            headers:{
+			    'Content-Type': 'multipart/form-data'
+			}
+        }
+        console.log(params)
+        if(params) config.data =params
+        return request(config)
+    },
 	postUncode(url,params){
 		const config = {
 		    method: 'post',

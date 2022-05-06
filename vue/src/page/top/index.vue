@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="top-list">
         
         <div class="list">
             <div class="item" v-for="item in rankList" :key="item.id">
@@ -24,6 +24,18 @@
                 </div> -->
             </div>
         </div>
+        <div class="pagi">
+      <el-pagination
+        v-model:currentPage="currentPage"
+        v-model:page-size="pageSize"
+        :page-sizes="[10, 20, 50, 100]"
+        
+        layout="total,sizes, prev, pager, next"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
     </div>
 </template>
 <script lang="ts" setup>
@@ -36,19 +48,31 @@ import {useRouter} from 'vue-router'
 const router=useRouter()
  const rankList=ref([])
  const sortList=ref([])
- const actSort=ref<null|number>(null)
- const getRankList=(sortId:number|null)=>{
-     actSort.value=sortId
+ const pageSize=ref(10)
+const currentPage=ref(1)
+const total=ref(0)
+ 
+const handleSizeChange = (val: number) => {
+   getRankList()
+
+}
+const handleCurrentChange = (val: number) => {
+  getRankList()
+}
+ const getRankList=( )=>{
+     
       api.getRankList({
-          
+             size:pageSize.value,
+      page:currentPage.value
  }).then(res=>{
      if(res&&res.data){
          rankList.value=res.data.data.list
+           total.value=res.data.data.count
      }
      console.log(res)
  })
  }
-getRankList(null)
+getRankList( )
  
  const toDetail=(item:any)=>{
      router.push({
@@ -71,6 +95,23 @@ getRankList(null)
  }
 </script>
 <style scoped lang="scss">
+.top-list{
+   height: 100%;
+   display: flex;
+   justify-content: space-between;
+   flex-direction: column;
+}
+.list{
+    flex: 1;
+    overflow: auto;
+}
+.pagi{
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+    border-top: 1px solid #eee;
+}
 .item{
     padding: 20px;
     border-bottom: 1px solid #eee;

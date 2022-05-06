@@ -9,7 +9,7 @@
      <div class="headers">
  <el-menu
         active-text-color="#dfff7d"
-        background-color="#05d18f"
+        background-color="#0087bf"
         class="el-menu-vertical-demo"
          :default-active="onRoutes" 
         text-color="#fff"
@@ -66,7 +66,7 @@ const menuList=[
 .logo{
   height: 50px;
   display: none;
-  background-color: #05d18f;
+  background-color: #0087bf;
   border-bottom: 1px solid #dfff7d;
   // display: flex;
   align-items: center;
@@ -80,7 +80,8 @@ const menuList=[
     //  width: 30%;
      transition: 0.3s;
      min-width: 250px;
-     background-color: #05d18f;
+    
+     background-color: #0087bf;
      &.collapse{
        min-width: 0;
      }

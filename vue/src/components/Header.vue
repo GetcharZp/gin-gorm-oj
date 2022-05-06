@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue'
 import {useStore} from 'vuex'
 import LoginPage from '../page/login.vue'
+import {ElMessage} from 'element-plus'
 import {
   Fold,Expand,Setting
 } from '@element-plus/icons-vue'
@@ -9,6 +10,7 @@ import {
 const store=useStore()
 const collapse=computed(()=>store.state.collapse)
 const isLogin=computed(()=>store.state.isLogin)
+const is_admin=computed(()=>store.state.is_admin)
 const username=computed(()=>store.state.username)
 function changeMenu(){
   store.commit('changeCollapse',!collapse.value)
@@ -18,6 +20,11 @@ const handleCommand = (command: string | number | object) => {
     localStorage.clear()
     // location.reload()
     store.commit('logout')
+  }else if(command=='b'){//分类
+    ElMessage('正在开发中')
+  }else if(command=='c'){//问题
+    ElMessage('正在开发中')
+
   }
 }
  const showLogin=ref(false)
@@ -40,6 +47,9 @@ const handleCommand = (command: string | number | object) => {
         </div>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item :icon="Plus" command="b" v-if="is_admin">分类管理</el-dropdown-item>
+            <el-dropdown-item :icon="Plus" command="c" v-if="is_admin">问题管理</el-dropdown-item>
+
             <el-dropdown-item :icon="Plus" command="a">退出登录</el-dropdown-item>
             
           </el-dropdown-menu>

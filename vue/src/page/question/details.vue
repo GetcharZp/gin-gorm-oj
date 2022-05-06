@@ -3,8 +3,7 @@
         <div class="ques-cont">
             <div class="left">
                     <h3>{{detail.title}}</h3>
-                    <p>{{detail.content}}</p>
-                    <div class="msg">
+                     <div class="msg">
                        分类：<span v-for="mi in detail.problem_categories" :key="mi.id">
                                 {{mi.category_basic.name}}
                             </span>
@@ -16,6 +15,8 @@
                         <span>最大耗时：{{detail.max_runtime}}ms</span>
                         
                     </div>
+                    <p>{{detail.content}}</p>
+                   
             </div>
             <div class="right">
                 <Editor></Editor>  
