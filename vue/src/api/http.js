@@ -24,6 +24,31 @@ const http ={
         if(params) config.data = params
         return request(config)
     },
+    postJson(url,params){
+        const config = {
+            method: 'post',
+            url:url,
+            headers:{
+			    'Content-Type': 'multipart/form-data'
+			}
+        }
+        console.log(params)
+        if(params) config.data =params
+        return request(config)
+    },
+    postSB(url,params){
+		const config = {
+		    method: 'post',
+		    url:url,
+			headers:{
+			    'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		}
+		
+		if(params) config.data = qs.stringify(params,{arrayFormat:'repeat'})
+		
+		return request(config)
+	},
 	postUncode(url,params){
 		const config = {
 		    method: 'post',
@@ -50,15 +75,20 @@ const http ={
     put(url,params){
         const config = {
             method: 'put',
-            url:url
+            url:url,
+            headers:{
+			    'Content-Type': 'application/x-www-form-urlencoded'
+			}
         }
-        if(params) config.params = params
+        
+        if(params) config.data = qs.stringify(params)
         return request(config)
     },
     delete(url,params){
         const config = {
             method: 'delete',
-            url:url
+            url:url,
+            
         }
         if(params) config.params = params
         return request(config)

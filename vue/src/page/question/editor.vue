@@ -10,10 +10,10 @@
     </div>
     <div id="codeEditBox"></div>
     <div class="submit">
-      <el-button type="primary" @click="submitCode">提交</el-button>
+      <el-button type="primary" @click="submitCode" :loading="loading">提交</el-button>
     </div>
     <div class="sub-box">
-      {{msg}}
+     编译结果： {{msg}}
     </div>
   </div>
 </template>
@@ -24,18 +24,22 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
 import * as monaco from 'monaco-editor';
-import { nextTick,ref } from 'vue'
+import { nextTick,ref,onBeforeUnmount } from 'vue'
 import {useRoute} from 'vue-router'
 import api from '../../api/api.js'
+ 
 import {ElMessage} from 'element-plus'
 const text=ref('')
 const route=useRoute()
 const language=ref('go')
 const msg=ref()
+const loading=ref(false)
 // 
 // MonacoEditor start
 //
-
+ onBeforeUnmount(()=>{
+   editor.dispose() 
+ })
 // @ts-ignore
 self.MonacoEnvironment = {
   getWorker(_: string, label: string) {
@@ -84,7 +88,7 @@ const editorInit = () => {
             overviewRulerBorder: false, // 不要滚动条的边框  
         }) : 
         editor.setValue("");
-        console.log(editor)
+        // console.log(editor)
         // 监听值的变化
         editor.onDidChangeModelContent((val:any) => {
             text.value = editor.getValue();
@@ -103,10 +107,18 @@ const changeLanguage=()=>{
   //       });
 }
 const submitCode=()=>{
+  loading.value=true
   api.submitCode(text.value,route.query.identity).then(res=>{
+    loading.value=false
       if(res.data.code==200){
         msg.value=res.data.data.msg
-        ElMessage.success(res.data.data.msg)
+      
+        if(res.data.data.status==1){
+            ElMessage.success(res.data.data.msg)
+        }else{
+             ElMessage.warning(res.data.data.msg)
+        }
+       
 
       }else{
         ElMessage.error(res.data.msg)
@@ -132,19 +144,23 @@ editor.onDidChangeLanguage　　//语言改变事件
 <style scoped lang="scss">
 #codeEditBox {
   //  width: 100%;
-  flex: 1;
+  height: 50%;
 }
 .select{
-  padding: 10px;
+  padding: 10px 0;
 }
 .submit{
   text-align: center;
   padding: 10px 0;
+  
 }
 .e-box{
   width: 100%;
+  padding: 10px ;
+  box-sizing: border-box;
   height: 100%;
   display: flex;
+  justify-content: space-between;
   box-sizing: border-box;
   flex-direction: column;
 }
@@ -153,7 +169,7 @@ editor.onDidChangeLanguage　　//语言改变事件
   background-color: #999;
   padding: 10px;
   box-sizing: border-box;
-  height: 40px;
+  flex: 1;
   color: white;
 }
 </style>

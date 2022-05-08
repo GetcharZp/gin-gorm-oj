@@ -24,6 +24,12 @@ const routes=[
                 component:()=>import('../page/question/index.vue')
             },
             {
+                path:'/questionManage',
+                name:'questionManage',
+
+                component:()=>import('../page/manager/index.vue')
+            },
+            {
                 path:'/questionDetail',
                 name:'questionDetail',
 
@@ -68,8 +74,9 @@ router.beforeEach((to,from,next)=>{
     } else {
         if(role&&!store.state.isLogin){
             const username = localStorage.getItem('username');
+            const is_admin = localStorage.getItem('is_admin');
             store.commit('loginSucc',role)
-            store.commit('setUser',username)
+            store.commit('setUser',{username,is_admin})
         }
         // if(){
              
