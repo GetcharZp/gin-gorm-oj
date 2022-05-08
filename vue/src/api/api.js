@@ -27,6 +27,21 @@ export default{
 	register(param){//注册
 		return http.postUncode(`/register`,param)
 	},
+	delSort(param){//删除
+		return http.delete(`/admin/category-delete`,param)
+	},
+	addSort(param){//分类创建
+		return http.postUncode(`/admin/category-create`,param)
+	},
+	addProblem(param){//问题创建
+		return http.postSB(`/admin/problem-create`,param)
+	},
+	editProblem(param){//问题编辑
+		return http.put(`/admin/problem-modify`,param)
+	},
+	editSort(param){//分类编辑
+		return http.put(`/admin/category-modify`,param)
+	},
 	submitCode(param,id){//提交代码
 		return http.postJson(`/user/submit?problem_identity=${id}`,param)
 	},

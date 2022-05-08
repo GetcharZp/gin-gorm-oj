@@ -24,6 +24,12 @@ const routes=[
                 component:()=>import('../page/question/index.vue')
             },
             {
+                path:'/questionManage',
+                name:'questionManage',
+
+                component:()=>import('../page/manager/index.vue')
+            },
+            {
                 path:'/questionDetail',
                 name:'questionDetail',
 
