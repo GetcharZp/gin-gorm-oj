@@ -133,6 +133,9 @@ const docTemplate = `{
         },
         "/admin/problem-create": {
             "post": {
+                "consumes": [
+                    "application/json"
+                ],
                 "tags": [
                     "管理员私有方法"
                 ],
@@ -146,53 +149,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "title",
-                        "name": "title",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "content",
-                        "name": "content",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "max_runtime",
-                        "name": "max_runtime",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "max_mem",
-                        "name": "max_mem",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi",
-                        "description": "category_ids",
-                        "name": "category_ids",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi",
-                        "description": "test_cases",
-                        "name": "test_cases",
-                        "in": "formData",
-                        "required": true
+                        "description": "ProblemBasic",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/define.ProblemBasic"
+                        }
                     }
                 ],
                 "responses": {
@@ -220,60 +183,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "type": "string",
-                        "description": "identity",
-                        "name": "identity",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "title",
-                        "name": "title",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "content",
-                        "name": "content",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "max_runtime",
-                        "name": "max_runtime",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "max_mem",
-                        "name": "max_mem",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi",
-                        "description": "category_ids",
-                        "name": "category_ids",
-                        "in": "formData"
-                    },
-                    {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        },
-                        "collectionFormat": "multi",
-                        "description": "test_cases",
-                        "name": "test_cases",
-                        "in": "formData",
-                        "required": true
+                        "description": "ProblemBasic",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/define.ProblemBasic"
+                        }
                     }
                 ],
                 "responses": {
@@ -635,6 +551,60 @@ const docTemplate = `{
                             "type": "string"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "define.ProblemBasic": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "问题内容",
+                    "type": "string"
+                },
+                "identity": {
+                    "description": "问题表的唯一标识",
+                    "type": "string"
+                },
+                "max_mem": {
+                    "description": "最大运行内存",
+                    "type": "integer"
+                },
+                "max_runtime": {
+                    "description": "最大运行时长",
+                    "type": "integer"
+                },
+                "problem_categories": {
+                    "description": "关联问题分类表",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "test_cases": {
+                    "description": "关联测试用例表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/define.TestCase"
+                    }
+                },
+                "title": {
+                    "description": "问题标题",
+                    "type": "string"
+                }
+            }
+        },
+        "define.TestCase": {
+            "type": "object",
+            "properties": {
+                "input": {
+                    "description": "输入",
+                    "type": "string"
+                },
+                "output": {
+                    "description": "输出",
+                    "type": "string"
                 }
             }
         }

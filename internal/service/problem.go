@@ -1,8 +1,6 @@
 package service
 
 import (
-	"encoding/json"
-	"errors"
 	"getcharzp.cn/define"
 	"getcharzp.cn/helper"
 	"getcharzp.cn/models"
@@ -96,23 +94,24 @@ func GetProblemDetail(c *gin.Context) {
 // ProblemCreate
 // @Tags 管理员私有方法
 // @Summary 问题创建
+// @Accept json
 // @Param authorization header string true "authorization"
-// @Param title formData string true "title"
-// @Param content formData string true "content"
-// @Param max_runtime formData int true "max_runtime"
-// @Param max_mem formData int true "max_mem"
-// @Param category_ids formData []string false "category_ids" collectionFormat(multi)
-// @Param test_cases formData []string true "test_cases" collectionFormat(multi)
+// @Param data body define.ProblemBasic true "ProblemBasic"
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /admin/problem-create [post]
 func ProblemCreate(c *gin.Context) {
-	title := c.PostForm("title")
-	content := c.PostForm("content")
-	maxRuntime, _ := strconv.Atoi(c.PostForm("max_runtime"))
-	maxMem, _ := strconv.Atoi(c.PostForm("max_mem"))
-	categoryIds := c.PostFormArray("category_ids")
-	testCases := c.PostFormArray("test_cases")
-	if title == "" || content == "" || len(categoryIds) == 0 || len(testCases) == 0 || maxRuntime == 0 || maxMem == 0 {
+	in := new(define.ProblemBasic)
+	err := c.ShouldBindJSON(in)
+	if err != nil {
+		log.Println("[JsonBind Error] : ", err)
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数错误",
+		})
+		return
+	}
+
+	if in.Title == "" || in.Content == "" || len(in.ProblemCategories) == 0 || len(in.TestCases) == 0 || in.MaxRuntime == 0 || in.MaxMem == 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "参数不能为空",
@@ -122,60 +121,36 @@ func ProblemCreate(c *gin.Context) {
 	identity := helper.GetUUID()
 	data := &models.ProblemBasic{
 		Identity:   identity,
-		Title:      title,
-		Content:    content,
-		MaxRuntime: maxRuntime,
-		MaxMem:     maxMem,
+		Title:      in.Title,
+		Content:    in.Content,
+		MaxRuntime: in.MaxRuntime,
+		MaxMem:     in.MaxMem,
 	}
 	// 处理分类
 	categoryBasics := make([]*models.ProblemCategory, 0)
-	for _, id := range categoryIds {
-		categoryId, _ := strconv.Atoi(id)
+	for _, id := range in.ProblemCategories {
 		categoryBasics = append(categoryBasics, &models.ProblemCategory{
 			ProblemId:  data.ID,
-			CategoryId: uint(categoryId),
+			CategoryId: uint(id),
 		})
 	}
 	data.ProblemCategories = categoryBasics
 	// 处理测试用例
 	testCaseBasics := make([]*models.TestCase, 0)
-	for _, testCase := range testCases {
+	for _, v := range in.TestCases {
 		// 举个例子 {"input":"1 2\n","output":"3\n"}
-		caseMap := make(map[string]string)
-		err := json.Unmarshal([]byte(testCase), &caseMap)
-		if err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"code": -1,
-				"msg":  "测试用例格式错误",
-			})
-			return
-		}
-		if _, ok := caseMap["input"]; !ok {
-			c.JSON(http.StatusOK, gin.H{
-				"code": -1,
-				"msg":  "测试用例格式错误",
-			})
-			return
-		}
-		if _, ok := caseMap["output"]; !ok {
-			c.JSON(http.StatusOK, gin.H{
-				"code": -1,
-				"msg":  "测试用例格式错误",
-			})
-			return
-		}
 		testCaseBasic := &models.TestCase{
 			Identity:        helper.GetUUID(),
 			ProblemIdentity: identity,
-			Input:           caseMap["input"],
-			Output:          caseMap["output"],
+			Input:           v.Input,
+			Output:          v.Output,
 		}
 		testCaseBasics = append(testCaseBasics, testCaseBasic)
 	}
 	data.TestCases = testCaseBasics
 
 	// 创建问题
-	err := models.DB.Create(data).Error
+	err = models.DB.Create(data).Error
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -195,24 +170,21 @@ func ProblemCreate(c *gin.Context) {
 // @Tags 管理员私有方法
 // @Summary 问题修改
 // @Param authorization header string true "authorization"
-// @Param identity formData string true "identity"
-// @Param title formData string true "title"
-// @Param content formData string true "content"
-// @Param max_runtime formData int true "max_runtime"
-// @Param max_mem formData int true "max_mem"
-// @Param category_ids formData []string false "category_ids" collectionFormat(multi)
-// @Param test_cases formData []string true "test_cases" collectionFormat(multi)
+// @Param data body define.ProblemBasic true "ProblemBasic"
 // @Success 200 {string} json "{"code":"200","data":""}"
 // @Router /admin/problem-modify [put]
 func ProblemModify(c *gin.Context) {
-	identity := c.PostForm("identity")
-	title := c.PostForm("title")
-	content := c.PostForm("content")
-	maxRuntime, _ := strconv.Atoi(c.PostForm("max_runtime"))
-	maxMem, _ := strconv.Atoi(c.PostForm("max_mem"))
-	categoryIds := c.PostFormArray("category_ids")
-	testCases := c.PostFormArray("test_cases")
-	if identity == "" || title == "" || content == "" || len(categoryIds) == 0 || len(testCases) == 0 || maxRuntime == 0 || maxMem == 0 {
+	in := new(define.ProblemBasic)
+	err := c.ShouldBindJSON(in)
+	if err != nil {
+		log.Println("[JsonBind Error] : ", err)
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数错误",
+		})
+		return
+	}
+	if in.Identity == "" || in.Title == "" || in.Content == "" || len(in.ProblemCategories) == 0 || len(in.TestCases) == 0 || in.MaxRuntime == 0 || in.MaxMem == 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "参数不能为空",
@@ -223,18 +195,18 @@ func ProblemModify(c *gin.Context) {
 	if err := models.DB.Transaction(func(tx *gorm.DB) error {
 		// 问题基础信息保存 problem_basic
 		problemBasic := &models.ProblemBasic{
-			Identity:   identity,
-			Title:      title,
-			Content:    content,
-			MaxRuntime: maxRuntime,
-			MaxMem:     maxMem,
+			Identity:   in.Identity,
+			Title:      in.Title,
+			Content:    in.Content,
+			MaxRuntime: in.MaxRuntime,
+			MaxMem:     in.MaxMem,
 		}
-		err := tx.Where("identity = ?", identity).Updates(problemBasic).Error
+		err := tx.Where("identity = ?", in.Identity).Updates(problemBasic).Error
 		if err != nil {
 			return err
 		}
 		// 查询问题详情
-		err = tx.Where("identity = ?", identity).Find(problemBasic).Error
+		err = tx.Where("identity = ?", in.Identity).Find(problemBasic).Error
 		if err != nil {
 			return err
 		}
@@ -247,11 +219,10 @@ func ProblemModify(c *gin.Context) {
 		}
 		// 2、新增新的关联关系
 		pcs := make([]*models.ProblemCategory, 0)
-		for _, id := range categoryIds {
-			intId, _ := strconv.Atoi(id)
+		for _, id := range in.ProblemCategories {
 			pcs = append(pcs, &models.ProblemCategory{
 				ProblemId:  problemBasic.ID,
-				CategoryId: uint(intId),
+				CategoryId: uint(id),
 			})
 		}
 		err = tx.Create(&pcs).Error
@@ -260,30 +231,19 @@ func ProblemModify(c *gin.Context) {
 		}
 		// 关联测试案例的更新
 		// 1、删除已存在的关联关系
-		err = tx.Where("problem_identity = ?", identity).Delete(new(models.TestCase)).Error
+		err = tx.Where("problem_identity = ?", in.Identity).Delete(new(models.TestCase)).Error
 		if err != nil {
 			return err
 		}
 		// 2、增加新的关联关系
 		tcs := make([]*models.TestCase, 0)
-		for _, testCase := range testCases {
+		for _, v := range in.TestCases {
 			// 举个例子 {"input":"1 2\n","output":"3\n"}
-			caseMap := make(map[string]string)
-			err := json.Unmarshal([]byte(testCase), &caseMap)
-			if err != nil {
-				return err
-			}
-			if _, ok := caseMap["input"]; !ok {
-				return errors.New("测试案例[input]格式错误")
-			}
-			if _, ok := caseMap["output"]; !ok {
-				return errors.New("测试案例[output]格式错误")
-			}
 			tcs = append(tcs, &models.TestCase{
 				Identity:        helper.GetUUID(),
-				ProblemIdentity: identity,
-				Input:           caseMap["input"],
-				Output:          caseMap["output"],
+				ProblemIdentity: in.Identity,
+				Input:           v.Input,
+				Output:          v.Output,
 			})
 		}
 		err = tx.Create(tcs).Error

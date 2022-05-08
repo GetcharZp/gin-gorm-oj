@@ -1,3 +1,41 @@
+definitions:
+  define.ProblemBasic:
+    properties:
+      content:
+        description: 问题内容
+        type: string
+      identity:
+        description: 问题表的唯一标识
+        type: string
+      max_mem:
+        description: 最大运行内存
+        type: integer
+      max_runtime:
+        description: 最大运行时长
+        type: integer
+      problem_categories:
+        description: 关联问题分类表
+        items:
+          type: integer
+        type: array
+      test_cases:
+        description: 关联测试用例表
+        items:
+          $ref: '#/definitions/define.TestCase'
+        type: array
+      title:
+        description: 问题标题
+        type: string
+    type: object
+  define.TestCase:
+    properties:
+      input:
+        description: 输入
+        type: string
+      output:
+        description: 输出
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -79,47 +117,20 @@ paths:
       - 管理员私有方法
   /admin/problem-create:
     post:
+      consumes:
+      - application/json
       parameters:
       - description: authorization
         in: header
         name: authorization
         required: true
         type: string
-      - description: title
-        in: formData
-        name: title
+      - description: ProblemBasic
+        in: body
+        name: data
         required: true
-        type: string
-      - description: content
-        in: formData
-        name: content
-        required: true
-        type: string
-      - description: max_runtime
-        in: formData
-        name: max_runtime
-        required: true
-        type: integer
-      - description: max_mem
-        in: formData
-        name: max_mem
-        required: true
-        type: integer
-      - collectionFormat: multi
-        description: category_ids
-        in: formData
-        items:
-          type: string
-        name: category_ids
-        type: array
-      - collectionFormat: multi
-        description: test_cases
-        in: formData
-        items:
-          type: string
-        name: test_cases
-        required: true
-        type: array
+        schema:
+          $ref: '#/definitions/define.ProblemBasic'
       responses:
         "200":
           description: '{"code":"200","data":""}'
@@ -136,46 +147,12 @@ paths:
         name: authorization
         required: true
         type: string
-      - description: identity
-        in: formData
-        name: identity
+      - description: ProblemBasic
+        in: body
+        name: data
         required: true
-        type: string
-      - description: title
-        in: formData
-        name: title
-        required: true
-        type: string
-      - description: content
-        in: formData
-        name: content
-        required: true
-        type: string
-      - description: max_runtime
-        in: formData
-        name: max_runtime
-        required: true
-        type: integer
-      - description: max_mem
-        in: formData
-        name: max_mem
-        required: true
-        type: integer
-      - collectionFormat: multi
-        description: category_ids
-        in: formData
-        items:
-          type: string
-        name: category_ids
-        type: array
-      - collectionFormat: multi
-        description: test_cases
-        in: formData
-        items:
-          type: string
-        name: test_cases
-        required: true
-        type: array
+        schema:
+          $ref: '#/definitions/define.ProblemBasic'
       responses:
         "200":
           description: '{"code":"200","data":""}'
