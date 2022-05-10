@@ -34,7 +34,7 @@
            <b @click="toDetail(item)" >{{ item.title }}</b> 
             <div class="sort">
               <span v-for="mi in item.problem_categories" :key="mi.id">
-                {{ mi.category_basic.name }}
+               <b v-if="mi.category_basic">{{ mi.category_basic.name }}</b> 
               </span>
             </div>
           </div>
