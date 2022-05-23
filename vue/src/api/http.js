@@ -84,6 +84,16 @@ const http ={
         if(params) config.data = qs.stringify(params)
         return request(config)
     },
+    putJson(url,params){
+        const config = {
+            method: 'put',
+            url:url,
+            
+        }
+        
+        if(params) config.data =params
+        return request(config)
+    },
     delete(url,params){
         const config = {
             method: 'delete',

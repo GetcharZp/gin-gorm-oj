@@ -34,10 +34,10 @@ export default{
 		return http.postUncode(`/admin/category-create`,param)
 	},
 	addProblem(param){//问题创建
-		return http.postSB(`/admin/problem-create`,param)
+		return http.post(`/admin/problem-create`,param)
 	},
 	editProblem(param){//问题编辑
-		return http.put(`/admin/problem-modify`,param)
+		return http.putJson(`/admin/problem-modify`,param)
 	},
 	editSort(param){//分类编辑
 		return http.put(`/admin/category-modify`,param)

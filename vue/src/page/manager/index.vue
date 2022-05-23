@@ -20,11 +20,11 @@
       <el-dialog
       v-model="quesDialog"
       :title="selectQues.id ? '编辑问题' : '新增问题'"
-      width="50%"
+      width="600px"
       :close-on-click-modal="false"
       :before-close="closeQues"
     >
-      <addQues @cancel="closeQues" @submit="subQues" :sortList="sortList"></addQues> 
+      <addQues @cancel="closeQues" :selectQues="selectQues" @submit="subQues" :sortList="sortList" v-if="quesDialog"></addQues> 
       
     </el-dialog>
     <div class="flex-box">
@@ -131,11 +131,22 @@ const closeQues=()=>{
   selectQues.value={}
 }
 const subQues=()=>{
-
+closeQues()
+getProblem(actSort.value)
 }
 const editQues=(item:any)=>{
-selectQues.value=item
-quesDialog.value=true
+   
+    api.getProblemDetail({
+        identity:item.identity
+    }).then(res=>{
+            if(res.data.data){
+                selectQues.value=res.data.data
+                quesDialog.value=true
+            }
+    })
+ 
+// selectQues.value=item
+
 }
 const handleSizeChange = (val: number) => {
   getProblem(actSort.value);
