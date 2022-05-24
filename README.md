@@ -1,10 +1,11 @@
 # 基于Gin、Gorm、Vue 实现的在线练习系统
 
 > 视频链接：https://www.bilibili.com/video/av339992531/
+> 演示地址：http://my.yituomao.com/oj/#/questionList
 > 
 > 后台语言：Golang、框架：Gin、GORM
 > 
-> 前台框架：Vue、ElementUI
+> 前台技术栈：Vue3、Element-plus、vite、typescript
 
 ## 参考链接
 GOLANG下载网址： https://golang.google.cn/dl/
