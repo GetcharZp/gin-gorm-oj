@@ -190,6 +190,50 @@
                 }
             }
         },
+        "/admin/test-case": {
+            "get": {
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "测试案例列表",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "问题唯一标识",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/category-list": {
             "get": {
                 "tags": [

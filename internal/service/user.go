@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -245,6 +246,12 @@ func GetRankList(c *gin.Context) {
 			"msg":  "Get Rank List Error:" + err.Error(),
 		})
 		return
+	}
+	for _, v := range list {
+		mail := strings.Split(v.Mail, "@")
+		if len(mail) >= 2 {
+			v.Mail = string(mail[0][0]) + "**@" + mail[1]
+		}
 	}
 
 	c.JSON(http.StatusOK, gin.H{

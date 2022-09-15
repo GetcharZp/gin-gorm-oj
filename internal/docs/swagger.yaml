@@ -161,6 +161,35 @@ paths:
       summary: 问题修改
       tags:
       - 管理员私有方法
+  /admin/test-case:
+    get:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: 问题唯一标识
+        in: query
+        name: identity
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 测试案例列表
+      tags:
+      - 管理员私有方法
   /category-list:
     get:
       parameters:

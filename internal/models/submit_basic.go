@@ -2,13 +2,12 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type SubmitBasic struct {
 	ID              uint           `gorm:"primarykey;" json:"id"`
-	CreatedAt       time.Time      `json:"created_at"`
-	UpdatedAt       time.Time      `json:"updated_at"`
+	CreatedAt       MyTime         `json:"created_at"`
+	UpdatedAt       MyTime         `json:"updated_at"`
 	DeletedAt       gorm.DeletedAt `gorm:"index;" json:"deleted_at"`
 	Identity        string         `gorm:"column:identity;type:varchar(36);" json:"identity"`                     // 唯一标识
 	ProblemIdentity string         `gorm:"column:problem_identity;type:varchar(36);" json:"problem_identity"`     // 问题表的唯一标识
@@ -26,7 +25,9 @@ func (table *SubmitBasic) TableName() string {
 func GetSubmitList(problemIdentity, userIdentity string, status int) *gorm.DB {
 	tx := DB.Model(new(SubmitBasic)).Preload("ProblemBasic", func(db *gorm.DB) *gorm.DB {
 		return db.Omit("content")
-	}).Preload("UserBasic")
+	}).Preload("UserBasic", func(db *gorm.DB) *gorm.DB {
+		return db.Omit("password")
+	})
 	if problemIdentity != "" {
 		tx.Where("problem_identity = ? ", problemIdentity)
 	}
@@ -36,5 +37,5 @@ func GetSubmitList(problemIdentity, userIdentity string, status int) *gorm.DB {
 	if status != 0 {
 		tx.Where("status = ? ", status)
 	}
-	return tx
+	return tx.Order("submit_basic.id DESC")
 }

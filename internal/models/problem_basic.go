@@ -2,13 +2,12 @@ package models
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type ProblemBasic struct {
 	ID                uint               `gorm:"primarykey;" json:"id"`
-	CreatedAt         time.Time          `json:"created_at"`
-	UpdatedAt         time.Time          `json:"updated_at"`
+	CreatedAt         MyTime             `json:"created_at"`
+	UpdatedAt         MyTime             `json:"updated_at"`
 	DeletedAt         gorm.DeletedAt     `gorm:"index;" json:"deleted_at"`
 	Identity          string             `gorm:"column:identity;type:varchar(36);" json:"identity"`                  // 问题表的唯一标识
 	ProblemCategories []*ProblemCategory `gorm:"foreignKey:problem_id;references:id" json:"problem_categories"`      // 关联问题分类表
@@ -34,5 +33,5 @@ func GetProblemList(keyword, categoryIdentity string) *gorm.DB {
 		tx.Joins("RIGHT JOIN problem_category pc on pc.problem_id = problem_basic.id").
 			Where("pc.category_id = (SELECT cb.id FROM category_basic cb WHERE cb.identity = ? )", categoryIdentity)
 	}
-	return tx
+	return tx.Order("problem_basic.id DESC")
 }
