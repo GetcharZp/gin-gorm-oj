@@ -188,11 +188,13 @@ func Register(c *gin.Context) {
 	// 数据的插入
 	userIdentity := helper.GetUUID()
 	data := &models.UserBasic{
-		Identity: userIdentity,
-		Name:     name,
-		Password: helper.GetMd5(password),
-		Phone:    phone,
-		Mail:     mail,
+		Identity:  userIdentity,
+		Name:      name,
+		Password:  helper.GetMd5(password),
+		Phone:     phone,
+		Mail:      mail,
+		CreatedAt: models.MyTime(time.Now()),
+		UpdatedAt: models.MyTime(time.Now()),
 	}
 	err = models.DB.Create(data).Error
 	if err != nil {

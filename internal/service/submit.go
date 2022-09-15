@@ -97,6 +97,8 @@ func Submit(c *gin.Context) {
 		ProblemIdentity: problemIdentity,
 		UserIdentity:    userClaim.Identity,
 		Path:            path,
+		CreatedAt:       models.MyTime(time.Now()),
+		UpdatedAt:       models.MyTime(time.Now()),
 	}
 	// 代码判断
 	pb := new(models.ProblemBasic)

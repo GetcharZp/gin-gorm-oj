@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // GetProblemList
@@ -125,6 +126,8 @@ func ProblemCreate(c *gin.Context) {
 		Content:    in.Content,
 		MaxRuntime: in.MaxRuntime,
 		MaxMem:     in.MaxMem,
+		CreatedAt:  models.MyTime(time.Now()),
+		UpdatedAt:  models.MyTime(time.Now()),
 	}
 	// 处理分类
 	categoryBasics := make([]*models.ProblemCategory, 0)
@@ -132,6 +135,8 @@ func ProblemCreate(c *gin.Context) {
 		categoryBasics = append(categoryBasics, &models.ProblemCategory{
 			ProblemId:  data.ID,
 			CategoryId: uint(id),
+			CreatedAt:  models.MyTime(time.Now()),
+			UpdatedAt:  models.MyTime(time.Now()),
 		})
 	}
 	data.ProblemCategories = categoryBasics
@@ -144,6 +149,8 @@ func ProblemCreate(c *gin.Context) {
 			ProblemIdentity: identity,
 			Input:           v.Input,
 			Output:          v.Output,
+			CreatedAt:       models.MyTime(time.Now()),
+			UpdatedAt:       models.MyTime(time.Now()),
 		}
 		testCaseBasics = append(testCaseBasics, testCaseBasic)
 	}
@@ -200,6 +207,7 @@ func ProblemModify(c *gin.Context) {
 			Content:    in.Content,
 			MaxRuntime: in.MaxRuntime,
 			MaxMem:     in.MaxMem,
+			UpdatedAt:  models.MyTime(time.Now()),
 		}
 		err := tx.Where("identity = ?", in.Identity).Updates(problemBasic).Error
 		if err != nil {
@@ -223,6 +231,8 @@ func ProblemModify(c *gin.Context) {
 			pcs = append(pcs, &models.ProblemCategory{
 				ProblemId:  problemBasic.ID,
 				CategoryId: uint(id),
+				CreatedAt:  models.MyTime(time.Now()),
+				UpdatedAt:  models.MyTime(time.Now()),
 			})
 		}
 		err = tx.Create(&pcs).Error
@@ -244,6 +254,8 @@ func ProblemModify(c *gin.Context) {
 				ProblemIdentity: in.Identity,
 				Input:           v.Input,
 				Output:          v.Output,
+				CreatedAt:       models.MyTime(time.Now()),
+				UpdatedAt:       models.MyTime(time.Now()),
 			})
 		}
 		err = tx.Create(tcs).Error

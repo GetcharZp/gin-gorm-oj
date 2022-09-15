@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 // GetCategoryList
@@ -61,9 +62,11 @@ func CategoryCreate(c *gin.Context) {
 	name := c.PostForm("name")
 	parentId, _ := strconv.Atoi(c.PostForm("parentId"))
 	category := &models.CategoryBasic{
-		Identity: helper.GetUUID(),
-		Name:     name,
-		ParentId: parentId,
+		Identity:  helper.GetUUID(),
+		Name:      name,
+		ParentId:  parentId,
+		CreatedAt: models.MyTime(time.Now()),
+		UpdatedAt: models.MyTime(time.Now()),
 	}
 	err := models.DB.Create(category).Error
 	if err != nil {
@@ -101,9 +104,10 @@ func CategoryModify(c *gin.Context) {
 		return
 	}
 	category := &models.CategoryBasic{
-		Identity: identity,
-		Name:     name,
-		ParentId: parentId,
+		Identity:  identity,
+		Name:      name,
+		ParentId:  parentId,
+		UpdatedAt: models.MyTime(time.Now()),
 	}
 	err := models.DB.Model(new(models.CategoryBasic)).Where("identity = ?", identity).Updates(category).Error
 	if err != nil {
