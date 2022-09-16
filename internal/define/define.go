@@ -28,5 +28,12 @@ type TestCase struct {
 }
 
 var (
-	DateLayout = "2006-01-02 15:04:05"
+	DateLayout            = "2006-01-02 15:04:05"
+	ValidGolangPackageMap = map[string]struct{}{
+		"bytes":   {},
+		"fmt":     {},
+		"math":    {},
+		"sort":    {},
+		"strings": {},
+	}
 )

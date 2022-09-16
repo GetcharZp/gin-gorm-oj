@@ -1,6 +1,8 @@
 package test
 
 import (
+	"fmt"
+	"getcharzp.cn/helper"
 	"math/rand"
 	"strconv"
 	"testing"
@@ -14,4 +16,12 @@ func TestRandGenerate(t *testing.T) {
 		s += strconv.Itoa(rand.Intn(10))
 	}
 	println(s)
+}
+
+func TestCheckGoCodeValid(t *testing.T) {
+	valid, err := helper.CheckGoCodeValid("../code/code-user/main.go")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(valid)
 }
