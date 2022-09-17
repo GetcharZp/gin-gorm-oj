@@ -21,7 +21,6 @@
   "devDependencies": {
     "@element-plus/icons-vue": "^1.1.4",
     "@vitejs/plugin-vue": "^2.2.0",
-    "esbuild-windows-64": "^0.14.27",
     "sass": "^1.49.9",
     "typescript": "^4.5.4",
     "vite": "^2.8.0",
