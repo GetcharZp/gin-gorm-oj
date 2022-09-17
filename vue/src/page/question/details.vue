@@ -15,7 +15,7 @@
                         <span>最大耗时：{{detail.max_runtime}}ms</span>
                         
                     </div>
-                    <p>{{detail.content}}</p>
+                    <div v-html="detail.content"></div>
                    
             </div>
             <div class="right">

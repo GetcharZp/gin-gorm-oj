@@ -2,9 +2,6 @@
   <div class="e-box">
     <div class="select">
       <el-select v-model="language" @change="changeLanguage">
-        <el-option value="html">HTML</el-option>
-        <el-option value="javascript">javascript</el-option>
-        <el-option value="php">php</el-option>
         <el-option value="go">go</el-option>
       </el-select>
     </div>
