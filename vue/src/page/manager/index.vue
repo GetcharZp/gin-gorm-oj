@@ -20,7 +20,7 @@
       <el-dialog
       v-model="quesDialog"
       :title="selectQues.id ? '编辑问题' : '新增问题'"
-      width="600px"
+      width="70%"
       :close-on-click-modal="false"
       :before-close="closeQues"
     >

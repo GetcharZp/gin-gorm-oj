@@ -20,7 +20,7 @@
           </el-form-item>
 
           <el-form-item label="密码" prop="password">
-            <el-input v-model="ruleForm.password"/>
+            <el-input v-model="ruleForm.password" show-password/>
           </el-form-item>
           <div style="text-align: center">
             <el-button type="primary" @click="submitForm(ruleFormRef)"
@@ -45,7 +45,7 @@
           </el-form-item>
 
           <el-form-item label="密码" prop="password">
-            <el-input v-model="registForm.password"/>
+            <el-input v-model="registForm.password" show-password/>
           </el-form-item>
           <el-form-item label="邮箱" prop="mail">
             <el-input v-model="registForm.mail"/>
