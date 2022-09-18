@@ -2,7 +2,7 @@
 
 > 视频链接：https://www.bilibili.com/video/av339992531/
 > 
-> 演示地址：http://oj.getcharzp.cn/
+> 演示地址：http://getcharzp.gitee.io/gin-gorm-oj
 >
 > 后台语言：Golang、框架：Gin、GORM
 > 
