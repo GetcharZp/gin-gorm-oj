@@ -11,7 +11,7 @@ import { ElMessage } from 'element-plus'
 // var msk=document.getElementsByClassName('axios-mask')[0]
 const service = axios.create({
  
-	baseURL: 'http://139.198.126.127:8080', 
+	baseURL: 'http://oj.getcharzp.cn',
 	// 超时时间 单位是ms，这里设置了3s的超时时间
 	timeout: 300 * 1000
 })
