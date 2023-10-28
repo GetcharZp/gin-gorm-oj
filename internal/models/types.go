@@ -3,8 +3,9 @@ package models
 import (
 	"database/sql/driver"
 	"fmt"
-	"getcharzp.cn/define"
 	"time"
+
+	"getcharzp.cn/define"
 )
 
 type MyTime time.Time

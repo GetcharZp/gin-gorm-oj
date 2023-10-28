@@ -27,6 +27,15 @@ type TestCase struct {
 	Output string `json:"output"` // 输出
 }
 
+type ContestBasic struct {
+	Identity      string `json:"identity"`      // 竞赛的唯一标识
+	Name          string `json:"name"`          // 竞赛名称
+	Content       string `json:"content"`       // 竞赛描述
+	ProblemBasics []int  `json:"problem_basic"` // 关联题目表id
+	StartAt       int64  `json:"start_at"`      // 竞赛开启时间
+	EndAt         int64  `json:"end_at"`        // 竞赛关闭时间
+}
+
 var (
 	DateLayout            = "2006-01-02 15:04:05"
 	ValidGolangPackageMap = map[string]struct{}{

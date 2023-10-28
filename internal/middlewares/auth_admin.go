@@ -1,9 +1,10 @@
 package middlewares
 
 import (
+	"net/http"
+
 	"getcharzp.cn/helper"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // AuthAdminCheck is a middleware function that checks if the user is authenticated with admin role.

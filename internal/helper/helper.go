@@ -4,16 +4,17 @@ import (
 	"crypto/md5"
 	"crypto/tls"
 	"fmt"
-	"getcharzp.cn/define"
-	"github.com/dgrijalva/jwt-go"
-	"github.com/jordan-wright/email"
-	uuid "github.com/satori/go.uuid"
 	"io/ioutil"
 	"math/rand"
 	"net/smtp"
 	"os"
 	"strconv"
 	"time"
+
+	"getcharzp.cn/define"
+	"github.com/dgrijalva/jwt-go"
+	"github.com/jordan-wright/email"
+	uuid "github.com/satori/go.uuid"
 )
 
 type UserClaims struct {
@@ -163,4 +164,8 @@ func CheckGoCodeValid(path string) (bool, error) {
 		}
 	}
 	return true, nil
+}
+
+func ToTime(num int64) time.Time {
+	return time.Unix(num, 0)
 }

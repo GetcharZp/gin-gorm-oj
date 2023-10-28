@@ -119,6 +119,43 @@
                 }
             }
         },
+        "/admin/contest-create": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "竞赛创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "contestBasic",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/define.ContestBasic"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/problem-create": {
             "post": {
                 "consumes": [
@@ -588,6 +625,38 @@
         }
     },
     "definitions": {
+        "define.ContestBasic": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "竞赛描述",
+                    "type": "string"
+                },
+                "end_at": {
+                    "description": "竞赛关闭时间",
+                    "type": "integer"
+                },
+                "identity": {
+                    "description": "竞赛的唯一标识",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "竞赛名称",
+                    "type": "string"
+                },
+                "problem_basic": {
+                    "description": "关联题目表id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "start_at": {
+                    "description": "竞赛开启时间",
+                    "type": "integer"
+                }
+            }
+        },
         "define.ProblemBasic": {
             "type": "object",
             "properties": {
