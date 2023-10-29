@@ -10,6 +10,7 @@ import (
 	"getcharzp.cn/helper"
 	"getcharzp.cn/models"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 // ContestCreate
@@ -116,5 +117,44 @@ func GetContestList(c *gin.Context) {
 			"list":  list,
 			"count": count,
 		},
+	})
+}
+
+// GetContestDetail
+// @Tags 公共方法
+// @Summary 竞赛详情
+// @Param identity query string false "contest identity"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /contest-detail [get]
+func GetContestDetail(c *gin.Context) {
+	identity := c.Query("identity")
+	if identity == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "竞赛唯一标识不能为空",
+		})
+		return
+	}
+	data := new(models.ContestBasic)
+	err := models.DB.Where("identity = ?", identity).
+		Preload("ContestProblems").Preload("ContestProblems.ProblemBasic").
+		First(&data).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusOK, gin.H{
+				"code": -1,
+				"msg":  "竞赛不存在",
+			})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Get Contest Detail Error:" + err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": data,
 	})
 }

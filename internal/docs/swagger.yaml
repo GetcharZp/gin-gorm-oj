@@ -260,6 +260,21 @@ paths:
       summary: 分类列表
       tags:
       - 公共方法
+  /contest-detail:
+    get:
+      parameters:
+      - description: contest identity
+        in: query
+        name: identity
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛详情
+      tags:
+      - 公共方法
   /contest-list:
     get:
       parameters:

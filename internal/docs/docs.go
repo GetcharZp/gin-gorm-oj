@@ -318,6 +318,30 @@ const docTemplate = `{
                 }
             }
         },
+        "/contest-detail": {
+            "get": {
+                "tags": [
+                    "公共方法"
+                ],
+                "summary": "竞赛详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "contest identity",
+                        "name": "identity",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/contest-list": {
             "get": {
                 "tags": [

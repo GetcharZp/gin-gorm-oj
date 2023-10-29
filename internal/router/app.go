@@ -35,6 +35,7 @@ func Router() *gin.Engine {
 	r.GET("/category-list", service.GetCategoryList)
 	// 竞赛列表
 	r.GET("/contest-list", service.GetContestList)
+	r.GET("/contest-detail", service.GetContestDetail)
 
 	// 管理员私有方法
 	// authAdmin := r.Group("/admin", middlewares.AuthAdminCheck())
