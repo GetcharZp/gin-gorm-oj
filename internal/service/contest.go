@@ -3,6 +3,7 @@ package service
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"getcharzp.cn/define"
@@ -75,6 +76,45 @@ func ContestCreate(c *gin.Context) {
 		"code": 200,
 		"data": map[string]interface{}{
 			"identity": data.Identity,
+		},
+	})
+}
+
+// GetContestList
+// @Tags 公共方法
+// @Summary 竞赛列表
+// @Param page query int false "page"
+// @Param size query int false "size"
+// @Param keyword query string false "keyword"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /contest-list [get]
+func GetContestList(c *gin.Context) {
+	size, _ := strconv.Atoi(c.DefaultQuery("size", define.DefaultSize))
+	page, err := strconv.Atoi(c.DefaultQuery("page", define.DefaultPage))
+	if err != nil {
+		log.Println("GetContestList Page strconv Error:", err)
+		return
+	}
+	page = (page - 1) * size
+	var count int64
+	keyword := c.Query("keyword")
+
+	list := make([]*models.ContestBasic, 0)
+	err = models.GetContestList(keyword).Distinct("`contest_basic`.`id`").Count(&count).Error
+	if err != nil {
+		log.Println("GetContestList Count Error:", err)
+		return
+	}
+	err = models.GetContestList(keyword).Offset(page).Limit(size).Find(&list).Error
+	if err != nil {
+		log.Println("Get Contest List Error:", err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"data": map[string]interface{}{
+			"list":  list,
+			"count": count,
 		},
 	})
 }

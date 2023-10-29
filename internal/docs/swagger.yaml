@@ -260,6 +260,29 @@ paths:
       summary: 分类列表
       tags:
       - 公共方法
+  /contest-list:
+    get:
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      - description: keyword
+        in: query
+        name: keyword
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛列表
+      tags:
+      - 公共方法
   /login:
     post:
       parameters:

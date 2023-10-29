@@ -20,3 +20,10 @@ type ContestBasic struct {
 func (table *ContestBasic) TableName() string {
 	return "contest_basic"
 }
+
+func GetContestList(keyword string) *gorm.DB {
+	tx := DB.Model(new(ContestBasic)).Distinct("`contest_basic`.`id`").Select("DISTINCT(`contest_basic`.`id`), `contest_basic`.`identity`, "+
+		"`contest_basic`.`name`, `contest_basic`.`content`, `contest_basic`.`start_at`, `contest_basic`.`end_at`, `contest_basic`.`created_at`, `contest_basic`.`updated_at`, `contest_basic`.`deleted_at` ").Preload("ContestProblems").Preload("ContestProblems.ProblemBasic").
+		Where("name like ? OR content like ? ", "%"+keyword+"%", "%"+keyword+"%")
+	return tx.Order("contest_basic.id DESC")
+}
