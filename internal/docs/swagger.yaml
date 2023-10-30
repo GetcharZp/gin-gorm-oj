@@ -162,6 +162,28 @@ paths:
       summary: 竞赛创建
       tags:
       - 管理员私有方法
+  /admin/contest-modify:
+    put:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: ContestBasic
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/define.ContestBasic'
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛修改
+      tags:
+      - 管理员私有方法
   /admin/problem-create:
     post:
       consumes:

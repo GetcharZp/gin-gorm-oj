@@ -158,3 +158,82 @@ func GetContestDetail(c *gin.Context) {
 		"data": data,
 	})
 }
+
+// ContestModify
+// @Tags 管理员私有方法
+// @Summary 竞赛修改
+// @Param authorization header string true "authorization"
+// @Param data body define.ContestBasic true "ContestBasic"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /admin/contest-modify [put]
+func ContestModify(c *gin.Context) {
+	in := new(define.ContestBasic)
+	err := c.ShouldBindJSON(in)
+	if err != nil {
+		log.Println("[JsonBind Error] : ", err)
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数错误",
+		})
+		return
+	}
+	if in.Identity == "" || in.Name == "" || in.Content == "" || len(in.ProblemBasics) == 0 || in.StartAt == 0 || in.EndAt == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数不能为空",
+		})
+		return
+	}
+
+	if err := models.DB.Transaction(func(tx *gorm.DB) error {
+		// 竞赛基础信息保存 contest_basic
+		contestBasic := &models.ContestBasic{
+			Name:      in.Name,
+			Content:   in.Content,
+			StartAt:   models.MyTime(helper.ToTime(in.StartAt)),
+			EndAt:     models.MyTime(helper.ToTime(in.EndAt)),
+			UpdatedAt: models.MyTime(time.Now()),
+		}
+		err := tx.Where("identity = ?", in.Identity).Updates(contestBasic).Error
+		if err != nil {
+			return err
+		}
+		// 查询竞赛详情
+		err = tx.Where("identity = ?", in.Identity).Find(contestBasic).Error
+		if err != nil {
+			return err
+		}
+
+		// 关联问题题目的更新
+		// 1、删除已存在的关联关系
+		err = tx.Where("problem_id = ?", contestBasic.ID).Delete(new(models.ContestProblem)).Error
+		if err != nil {
+			return err
+		}
+		// 2、新增新的关联关系
+		cps := make([]*models.ContestProblem, 0)
+		for _, id := range in.ProblemBasics {
+			cps = append(cps, &models.ContestProblem{
+				ContestId: contestBasic.ID,
+				ProblemId: uint(id),
+				CreatedAt: models.MyTime(time.Now()),
+				UpdatedAt: models.MyTime(time.Now()),
+			})
+		}
+		err = tx.Create(&cps).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	}); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Contest Modify Error:" + err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "竞赛修改成功",
+	})
+}
