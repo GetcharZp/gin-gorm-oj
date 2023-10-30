@@ -206,7 +206,7 @@ func ContestModify(c *gin.Context) {
 
 		// 关联问题题目的更新
 		// 1、删除已存在的关联关系
-		err = tx.Where("problem_id = ?", contestBasic.ID).Delete(new(models.ContestProblem)).Error
+		err = tx.Where("contest_id = ?", contestBasic.ID).Delete(new(models.ContestProblem)).Error
 		if err != nil {
 			return err
 		}
@@ -235,5 +235,51 @@ func ContestModify(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"msg":  "竞赛修改成功",
+	})
+}
+
+// ContestDelete
+// @Tags 管理员私有方法
+// @Summary 竞赛删除
+// @Param authorization header string true "authorization"
+// @Param identity query string true "identity"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /admin/contest-delete [delete]
+func ContestDelete(c *gin.Context) {
+	identity := c.Query("identity")
+	if identity == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数不正确",
+		})
+		return
+	}
+	if err := models.DB.Transaction(func(tx *gorm.DB) error {
+		cbs := &models.ContestBasic{}
+		// 查询竞赛是否存在
+		err := tx.Where("identity = ?", identity).First(cbs).Error
+		if err != nil {
+			return err
+		}
+
+		// 删除问题的关联
+		err = tx.Where("contest_id = ?", cbs.ID).Delete(new(models.ContestProblem)).Error
+		if err != nil {
+			return err
+		}
+
+		// 删除竞赛
+		err = tx.Where("identity = ?", identity).Delete(cbs).Error
+		return err
+	}); err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "Contest Delete Error:" + err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "删除成功",
 	})
 }

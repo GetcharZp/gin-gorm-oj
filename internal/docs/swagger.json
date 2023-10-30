@@ -156,6 +156,38 @@
                 }
             }
         },
+        "/admin/contest-delete": {
+            "delete": {
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "竞赛删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/contest-modify": {
             "put": {
                 "tags": [

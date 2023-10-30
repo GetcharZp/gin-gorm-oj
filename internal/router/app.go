@@ -57,6 +57,7 @@ func Router() *gin.Engine {
 	// 竞赛创建
 	authAdmin.POST("/contest-create", service.ContestCreate)
 	authAdmin.PUT("/contest-modify", service.ContestModify)
+	authAdmin.DELETE("/contest-delete", service.ContestDelete)
 
 	// 用户私有方法
 	authUser := r.Group("/user", middlewares.AuthUserCheck())
