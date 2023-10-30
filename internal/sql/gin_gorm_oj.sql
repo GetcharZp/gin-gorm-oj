@@ -150,4 +150,15 @@ CREATE TABLE `contest_problem`(
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `contest_user`;
+CREATE TABLE `contest_user`(
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `contest_id` int(11) DEFAULT NULL COMMENT '竞赛id',
+  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
 SET FOREIGN_KEY_CHECKS = 1;
