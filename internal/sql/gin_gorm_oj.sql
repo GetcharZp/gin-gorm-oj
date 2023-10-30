@@ -118,4 +118,47 @@ CREATE TABLE `user_basic` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
+
+-- ----------------------------
+-- Table structure for contest_basic
+-- ----------------------------
+DROP TABLE IF EXISTS `contest_basic`;
+CREATE TABLE `contest_basic` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `identity` varchar(36) DEFAULT NULL COMMENT '唯一标识',
+  `name` varchar(100) DEFAULT NULL COMMENT '名称',
+  `content` text DEFAULT NULL COMMENT '竞赛描述',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  `start_at` datetime DEFAULT NULL,
+  `end_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for contest_problem
+-- ----------------------------
+DROP TABLE IF EXISTS `contest_problem`;
+CREATE TABLE `contest_problem`(
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `contest_id` int(11) DEFAULT NULL COMMENT '竞赛id',
+  `problem_id` int(11) DEFAULT NULL COMMENT '问题id',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `contest_user`;
+CREATE TABLE `contest_user`(
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `contest_id` int(11) DEFAULT NULL COMMENT '竞赛id',
+  `user_identity` varchar(36) DEFAULT NULL COMMENT '用户identity',
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
 SET FOREIGN_KEY_CHECKS = 1;

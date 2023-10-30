@@ -119,6 +119,109 @@
                 }
             }
         },
+        "/admin/contest-create": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "竞赛创建",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "contestBasic",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/define.ContestBasic"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/contest-delete": {
+            "delete": {
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "竞赛删除",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "identity",
+                        "name": "identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/contest-modify": {
+            "put": {
+                "tags": [
+                    "管理员私有方法"
+                ],
+                "summary": "竞赛修改",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "ContestBasic",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/define.ContestBasic"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/problem-create": {
             "post": {
                 "consumes": [
@@ -240,6 +343,66 @@
                     "公共方法"
                 ],
                 "summary": "分类列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "size",
+                        "name": "size",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "keyword",
+                        "name": "keyword",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest-detail": {
+            "get": {
+                "tags": [
+                    "公共方法"
+                ],
+                "summary": "竞赛详情",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "contest identity",
+                        "name": "identity",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/contest-list": {
+            "get": {
+                "tags": [
+                    "公共方法"
+                ],
+                "summary": "竞赛列表",
                 "parameters": [
                     {
                         "type": "integer",
@@ -545,6 +708,38 @@
                 }
             }
         },
+        "/user/contest-registration": {
+            "post": {
+                "tags": [
+                    "用户私有方法"
+                ],
+                "summary": "竞赛报名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "contest_identity",
+                        "name": "contest_identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/submit": {
             "post": {
                 "tags": [
@@ -588,6 +783,38 @@
         }
     },
     "definitions": {
+        "define.ContestBasic": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "description": "竞赛描述",
+                    "type": "string"
+                },
+                "end_at": {
+                    "description": "竞赛关闭时间",
+                    "type": "integer"
+                },
+                "identity": {
+                    "description": "竞赛的唯一标识",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "竞赛名称",
+                    "type": "string"
+                },
+                "problem_basic": {
+                    "description": "关联题目表id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "start_at": {
+                    "description": "竞赛开启时间",
+                    "type": "integer"
+                }
+            }
+        },
         "define.ProblemBasic": {
             "type": "object",
             "properties": {

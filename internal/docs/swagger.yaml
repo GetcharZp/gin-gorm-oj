@@ -1,4 +1,27 @@
 definitions:
+  define.ContestBasic:
+    properties:
+      content:
+        description: 竞赛描述
+        type: string
+      end_at:
+        description: 竞赛关闭时间
+        type: integer
+      identity:
+        description: 竞赛的唯一标识
+        type: string
+      name:
+        description: 竞赛名称
+        type: string
+      problem_basic:
+        description: 关联题目表id
+        items:
+          type: integer
+        type: array
+      start_at:
+        description: 竞赛开启时间
+        type: integer
+    type: object
   define.ProblemBasic:
     properties:
       content:
@@ -115,6 +138,73 @@ paths:
       summary: 分类修改
       tags:
       - 管理员私有方法
+  /admin/contest-create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: contestBasic
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/define.ContestBasic'
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛创建
+      tags:
+      - 管理员私有方法
+  /admin/contest-delete:
+    delete:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: identity
+        in: query
+        name: identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛删除
+      tags:
+      - 管理员私有方法
+  /admin/contest-modify:
+    put:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: ContestBasic
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/define.ContestBasic'
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛修改
+      tags:
+      - 管理员私有方法
   /admin/problem-create:
     post:
       consumes:
@@ -211,6 +301,44 @@ paths:
           schema:
             type: string
       summary: 分类列表
+      tags:
+      - 公共方法
+  /contest-detail:
+    get:
+      parameters:
+      - description: contest identity
+        in: query
+        name: identity
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛详情
+      tags:
+      - 公共方法
+  /contest-list:
+    get:
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: size
+        in: query
+        name: size
+        type: integer
+      - description: keyword
+        in: query
+        name: keyword
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛列表
       tags:
       - 公共方法
   /login:
@@ -390,6 +518,27 @@ paths:
       summary: 用户详情
       tags:
       - 公共方法
+  /user/contest-registration:
+    post:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: contest_identity
+        in: query
+        name: contest_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛报名
+      tags:
+      - 用户私有方法
   /user/submit:
     post:
       parameters:

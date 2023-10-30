@@ -1,9 +1,11 @@
 package middlewares
 
 import (
+	"fmt"
+	"net/http"
+
 	"getcharzp.cn/helper"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func AuthUserCheck() gin.HandlerFunc {
@@ -26,6 +28,7 @@ func AuthUserCheck() gin.HandlerFunc {
 			})
 			return
 		}
+		fmt.Println(userClaim)
 		c.Set("user_claims", userClaim)
 		c.Next()
 	}
