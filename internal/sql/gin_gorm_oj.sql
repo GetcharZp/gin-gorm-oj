@@ -154,7 +154,7 @@ DROP TABLE IF EXISTS `contest_user`;
 CREATE TABLE `contest_user`(
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `contest_id` int(11) DEFAULT NULL COMMENT '竞赛id',
-  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `user_identity` varchar(36) DEFAULT NULL COMMENT '用户identity',
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL,
