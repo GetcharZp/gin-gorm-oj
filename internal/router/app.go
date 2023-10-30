@@ -38,8 +38,7 @@ func Router() *gin.Engine {
 	r.GET("/contest-detail", service.GetContestDetail)
 
 	// 管理员私有方法
-	// authAdmin := r.Group("/admin", middlewares.AuthAdminCheck())
-	authAdmin := r.Group("/admin")
+	authAdmin := r.Group("/admin", middlewares.AuthAdminCheck())
 	//authAdmin := r.Group("/admin")
 	// 问题创建
 	authAdmin.POST("/problem-create", service.ProblemCreate)
