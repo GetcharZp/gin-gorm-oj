@@ -15,6 +15,7 @@ type ContestBasic struct {
 	Name            string            `gorm:"column:name;type:varchar(100);" json:"name"`                   // 竞赛名称
 	Content         string            `gorm:"column:content;type:text;" json:"content"`                     // 竞赛描述
 	ContestProblems []*ContestProblem `gorm:"foreignKey:contest_id;references:id;" json:"contest_problems"` // 关联题目表
+	ContestUsers    []*ContestUser    `gorm:"foreignKey:contest_id;references:id;" json:"contest_users"`    // 关联用户表
 }
 
 func (table *ContestBasic) TableName() string {

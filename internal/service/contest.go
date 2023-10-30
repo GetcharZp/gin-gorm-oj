@@ -138,6 +138,7 @@ func GetContestDetail(c *gin.Context) {
 	data := new(models.ContestBasic)
 	err := models.DB.Where("identity = ?", identity).
 		Preload("ContestProblems").Preload("ContestProblems.ProblemBasic").
+		Preload("ContestUsers").
 		First(&data).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -264,6 +265,12 @@ func ContestDelete(c *gin.Context) {
 
 		// 删除问题的关联
 		err = tx.Where("contest_id = ?", cbs.ID).Delete(new(models.ContestProblem)).Error
+		if err != nil {
+			return err
+		}
+
+		// 删除用户的关联
+		err = tx.Where("contest_id = ?", cbs.ID).Delete(new(models.ContestUser)).Error
 		if err != nil {
 			return err
 		}
