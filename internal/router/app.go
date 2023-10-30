@@ -63,5 +63,6 @@ func Router() *gin.Engine {
 	authUser := r.Group("/user", middlewares.AuthUserCheck())
 	// 代码提交
 	authUser.POST("/submit", service.Submit)
+	authUser.POST("/contest-registration", service.ContestRegistration)
 	return r
 }

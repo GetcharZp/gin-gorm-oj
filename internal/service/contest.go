@@ -250,7 +250,7 @@ func ContestDelete(c *gin.Context) {
 	if identity == "" {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
-			"msg":  "参数不正确",
+			"msg":  "参数不能为空",
 		})
 		return
 	}
@@ -281,5 +281,89 @@ func ContestDelete(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"code": 200,
 		"msg":  "删除成功",
+	})
+}
+
+// ContestRegistration
+// @Tags 用户私有方法
+// @Summary 竞赛报名
+// @Param authorization header string true "authorization"
+// @Param contest_identity query string true "contest_identity"
+// @Success 200 {string} json "{"code":"200","data":""}"
+// @Router /user/contest-registration [post]
+func ContestRegistration(c *gin.Context) {
+	contestIdentity := c.Query("contest_identity")
+	if contestIdentity == "" {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "参数不能为空",
+		})
+		return
+	}
+	// 查询竞赛是否存在
+	cb := &models.ContestBasic{}
+	err := models.DB.Where("identity = ?", contestIdentity).First(cb).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "数据库异常",
+		})
+		return
+	}
+	if err == gorm.ErrRecordNotFound {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "竞赛不存在",
+		})
+		return
+	}
+
+	// 判断竞赛是否过期
+
+	if time.Now().After(time.Time(cb.StartAt)) {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "竞赛已开始或已结束",
+		})
+		return
+	}
+	u, _ := c.Get("user_claims")
+	userClaim := u.(*helper.UserClaims)
+
+	// 判断是否报名
+	err = models.DB.Where("contest_id = ? AND user_identity = ?", cb.ID, userClaim.Identity).First(&models.ContestUser{}).Error
+	if err != nil && err != gorm.ErrRecordNotFound {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "数据库异常",
+		})
+		return
+	}
+	if err != gorm.ErrRecordNotFound {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "竞赛已报名",
+		})
+		return
+	}
+
+	// 进行报名
+	cu := &models.ContestUser{
+		ContestId:    cb.ID,
+		UserIdentity: userClaim.Identity,
+		CreatedAt:    models.MyTime(time.Now()),
+		UpdatedAt:    models.MyTime(time.Now()),
+	}
+	err = models.DB.Create(cu).Error
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "数据库异常, 创建报名信息失败",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"code": 200,
+		"msg":  "报名成功",
 	})
 }

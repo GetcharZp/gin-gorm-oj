@@ -719,6 +719,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/contest-registration": {
+            "post": {
+                "tags": [
+                    "用户私有方法"
+                ],
+                "summary": "竞赛报名",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "authorization",
+                        "name": "authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "contest_identity",
+                        "name": "contest_identity",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"code\":\"200\",\"data\":\"\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/submit": {
             "post": {
                 "tags": [

@@ -518,6 +518,27 @@ paths:
       summary: 用户详情
       tags:
       - 公共方法
+  /user/contest-registration:
+    post:
+      parameters:
+      - description: authorization
+        in: header
+        name: authorization
+        required: true
+        type: string
+      - description: contest_identity
+        in: query
+        name: contest_identity
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":"200","data":""}'
+          schema:
+            type: string
+      summary: 竞赛报名
+      tags:
+      - 用户私有方法
   /user/submit:
     post:
       parameters:
