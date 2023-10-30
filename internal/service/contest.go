@@ -200,7 +200,7 @@ func ContestModify(c *gin.Context) {
 			return err
 		}
 		// 查询竞赛详情
-		err = tx.Where("identity = ?", in.Identity).Find(contestBasic).Error
+		err = tx.Where("identity = ?", in.Identity).First(contestBasic).Error
 		if err != nil {
 			return err
 		}
@@ -327,7 +327,7 @@ func ContestRegistration(c *gin.Context) {
 
 	// 判断竞赛是否过期
 
-	if time.Now().After(time.Time(cb.StartAt)) {
+	if time.Now().After(time.Time(cb.EndAt)) {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "竞赛已开始或已结束",
